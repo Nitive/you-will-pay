@@ -1,10 +1,11 @@
 # you-will-pay
 
 
-## Bulding
-  ###### Windows
-    `npm i -g purescript pulp bower purescript@next`
-    `pulp build`
+## Development
+1. Install `stack`. You can do this.
+2. Install app dependencies: `npm run deps`
+3. Run project `npm start`
+4. Fight side effects for your life!
 
 ## Testing
   `pulp build`

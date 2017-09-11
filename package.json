@@ -8,6 +8,7 @@
     "purescript": "^0.11.6"
   },
   "scripts": {
+    "deps": "stack setup && npm install && bower install",
     "server": "stack runghc src/Main.hs",
     "static-server": "pulp server",
     "start": "concurrently --raw 'npm run server' 'npm run static-server'"
