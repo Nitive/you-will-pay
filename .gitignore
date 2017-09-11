@@ -1,3 +1,4 @@
+# purescript
 /bower_components/
 /node_modules/
 /.pulp-cache/
@@ -6,3 +7,6 @@
 /.psc*
 /.purs*
 /.psa*
+
+# haskell
+/.stack-work/

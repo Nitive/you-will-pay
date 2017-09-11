@@ -17,6 +17,7 @@ template = do
         H.title "App"
       H.body $ do
         H.div "Loading..."
+        H.script ! A.src "http://localhost:1337/app.js" $ ""
 
 main = S.scotty 3000 $ do
   S.get "/" $ do
