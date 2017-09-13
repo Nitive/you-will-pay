@@ -11,7 +11,7 @@
     "deps": "stack setup && npm install && bower install",
     "server": "stack runghc src/Main.hs",
     "static-server": "pulp server",
-    "start": "concurrently -t -r \"npm run server\" \"npm run static-server\""
+    "start": "concurrently -r \"npm run server\" \"npm run static-server\""
   },
   "license": "UNLICENSED"
 }
