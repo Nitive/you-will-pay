@@ -12,6 +12,7 @@ import GHC.Generics
 data User = User
   { name :: String
   , color :: String
+  , id :: Int
   } deriving (Generic, Show)
 
 instance FromJSON User
@@ -19,7 +20,7 @@ instance ToJSON User
 
 data Transaction = Transaction
   { time :: String
-  , userName :: String
+  , userId :: Int
   , price :: Int
   , description :: String
   } deriving (Generic, Show)

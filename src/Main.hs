@@ -8,7 +8,7 @@ import Text.Blaze.Html5 ((!))
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Data.Aeson (Value (Null), (.=), object)
-import Server.Api.Api (SummaryReport(..), User(..), Transaction(..))
+import Server.Api.Api as Api
 
 template = do
   H.docTypeHtml $ do
@@ -29,11 +29,11 @@ main = S.scotty 3000 $ do
     S.json SummaryReport
       { payUserName = "Jon"
       , payDiff = 10
-      , users = [User { name = "Jon", color = "#50e3c2" }]
+      , users = [User { name = "Jon", Api.id = 1, color = "#50e3c2" }]
       , history =
         [ Transaction
           { time = "Thu Sep 14 2017 10:19:46 GMT+0300 (MSK)"
-          , userName = "Jon"
+          , userId = 1
           , price = 100
           , description = "Дал Арье на карманные расходы"
           }
