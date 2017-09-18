@@ -9,7 +9,7 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Web.Scotty as S
 
-import Api.Api as Api
+import Db.Types as T
 import Db.Connection
 import Db.Selectors
 
@@ -31,10 +31,12 @@ main = do
     S.get "/" $ do
       S.html . renderHtml $ template
 
-    S.get "/api/summary/" $ do
+    S.get "/api/room-summary/:room" $ do
+      roomIdParam <- S.param "room"
+      let roomId = read roomIdParam :: Int
       users <- liftIO $ selectUsers conn
 
-      S.json SummaryReport
+      S.json RoomSummaryReport
         { payUserName = "Jon"
         , payDiff = 10
         , users = users
@@ -42,7 +44,7 @@ main = do
           [ Transaction
             { time = "Thu Sep 14 2017 10:19:46 GMT+0300 (MSK)"
             , userId = 1
-            , price = 100
+            , price = roomId
             , description = "Дал Арье на карманные расходы"
             }
           ]

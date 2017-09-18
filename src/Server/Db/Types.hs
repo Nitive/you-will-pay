@@ -1,7 +1,7 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Api.Api
-( SummaryReport(..)
+module Db.Types
+( RoomSummaryReport(..)
 , User(..)
 , Transaction(..)
 ) where
@@ -23,6 +23,7 @@ instance ToRow User
 instance FromJSON User
 instance ToJSON User
 
+
 data Transaction = Transaction
   { time :: String
   , userId :: Int
@@ -33,12 +34,13 @@ data Transaction = Transaction
 instance FromJSON Transaction
 instance ToJSON Transaction
 
-data SummaryReport = SummaryReport
+
+data RoomSummaryReport = RoomSummaryReport
   { payUserName :: String
   , payDiff :: Int
   , users :: [User]
   , history :: [Transaction]
   } deriving (Generic, Show)
 
-instance FromJSON SummaryReport
-instance ToJSON SummaryReport
+instance FromJSON RoomSummaryReport
+instance ToJSON RoomSummaryReport

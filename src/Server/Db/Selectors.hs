@@ -6,7 +6,7 @@ module Db.Selectors
 ) where
 
 import Database.PostgreSQL.Simple
-import Api.Api
+import Db.Types
 import GHC.Generics
 
 selectUsers :: Connection -> IO [User]
