@@ -8,12 +8,17 @@ module Api.Api
 
 import Data.Aeson
 import GHC.Generics
+import Database.PostgreSQL.Simple
+
 
 data User = User
-  { name :: String
-  , color :: String
+  { color :: String
   , id :: Int
+  , name :: String
   } deriving (Generic, Show)
+
+instance FromRow User
+instance ToRow User
 
 instance FromJSON User
 instance ToJSON User

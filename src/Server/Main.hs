@@ -1,14 +1,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
-
-import qualified Web.Scotty as S
-import qualified Text.Blaze.Html5 as H
-import Text.Blaze.Html5 ((!))
-import qualified Text.Blaze.Html5.Attributes as A
-import Text.Blaze.Html.Renderer.Text (renderHtml)
+import Control.Monad.IO.Class
 import Data.Aeson (Value (Null), (.=), object)
+import Text.Blaze.Html.Renderer.Text (renderHtml)
+import Text.Blaze.Html5 ((!))
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as A
+import qualified Web.Scotty as S
+
 import Api.Api as Api
+import Db.Connection
+import Db.Selectors
 
 template = do
   H.docTypeHtml $ do
@@ -21,21 +24,26 @@ template = do
       H.body $ do
         H.script ! A.src "http://localhost:1337/app.js" $ ""
 
-main = S.scotty 3000 $ do
-  S.get "/" $ do
-    S.html . renderHtml $ template
+main = do
+  conn <- connection
 
-  S.get "/api/summary/" $ do
-    S.json SummaryReport
-      { payUserName = "Jon"
-      , payDiff = 10
-      , users = [User { name = "Jon", Api.id = 1, color = "#50e3c2" }]
-      , history =
-        [ Transaction
-          { time = "Thu Sep 14 2017 10:19:46 GMT+0300 (MSK)"
-          , userId = 1
-          , price = 100
-          , description = "Дал Арье на карманные расходы"
-          }
-        ]
-      }
+  S.scotty 3000 $ do
+    S.get "/" $ do
+      S.html . renderHtml $ template
+
+    S.get "/api/summary/" $ do
+      users <- liftIO $ selectUsers conn
+
+      S.json SummaryReport
+        { payUserName = "Jon"
+        , payDiff = 10
+        , users = users
+        , history =
+          [ Transaction
+            { time = "Thu Sep 14 2017 10:19:46 GMT+0300 (MSK)"
+            , userId = 1
+            , price = 100
+            , description = "Дал Арье на карманные расходы"
+            }
+          ]
+        }
