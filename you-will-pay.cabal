@@ -14,9 +14,9 @@ cabal-version:       >=1.10
 extra-source-files:  README.md
 
 executable you-will-pay
-  hs-source-dirs:      src
+  hs-source-dirs:      src/Server
   main-is:             Main.hs
-  other-modules:       Server.Api.Api
+  other-modules:       Api.Api
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , scotty >= 0.11 && < 0.12

@@ -8,7 +8,7 @@ import Text.Blaze.Html5 ((!))
 import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Data.Aeson (Value (Null), (.=), object)
-import Server.Api.Api as Api
+import Api.Api as Api
 
 template = do
   H.docTypeHtml $ do

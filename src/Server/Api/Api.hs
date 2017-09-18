@@ -1,6 +1,6 @@
 {-# LANGUAGE DeriveGeneric #-}
 
-module Server.Api.Api
+module Api.Api
 ( SummaryReport(..)
 , User(..)
 , Transaction(..)
