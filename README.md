@@ -4,7 +4,7 @@
 1. Install `stack`. You can do this.
 1. Install app dependencies: `npm run deps`
 1. Install PostgreSQL
-1. Run Postgresql: (on Mac) `brew services start postgresql`
+1. Run PostgreSQL: (on Mac) `brew services start postgresql`
 1. Create local database with `npm run init_local_db`
 1. Run project `npm start`
 1. Fight side effects for your life!
