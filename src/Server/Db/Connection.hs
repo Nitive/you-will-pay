@@ -8,4 +8,4 @@ module Db.Connection
 import Database.PostgreSQL.Simple
 
 connection :: IO Connection
-connection = connectPostgreSQL "dbname='you-will-pay'"
+connection = connectPostgreSQL "dbname='ywp_db' user='ywp_user'"

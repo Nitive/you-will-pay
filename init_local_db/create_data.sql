@@ -1,3 +1,6 @@
+REVOKE CONNECT ON DATABASE ywp_db FROM PUBLIC;
+GRANT CONNECT ON DATABASE ywp_db TO ywp_user;
+
 CREATE TABLE rooms (
   color VARCHAR(256) NOT NULL,
   id SERIAL NOT NULL, PRIMARY KEY (id),
@@ -8,7 +11,6 @@ INSERT INTO rooms (title, color)
 VALUES ('Matrix', 'blue');
 
 SELECT * FROM rooms;
-
 
 CREATE TABLE users (
   color VARCHAR(256) NOT NULL,
@@ -22,7 +24,6 @@ VALUES
   ('Trinity', 'white');
 
 SELECT * FROM users;
-
 
 CREATE TABLE transactions (
   created timestamptz NOT NULL,
@@ -39,3 +40,13 @@ VALUES
   ('2017-09-14 14:00:00+05', 200, 1, 'Программа обучения пилотирования вертолётом', 2);
 
 SELECT * FROM transactions;
+
+REVOKE ALL 
+  ON ALL TABLES 
+  IN SCHEMA public 
+  FROM PUBLIC;
+
+GRANT SELECT, INSERT 
+  ON ALL TABLES 
+  IN SCHEMA public 
+  TO ywp_user;
