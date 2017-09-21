@@ -26,4 +26,4 @@ main = do
 
   S.scotty 3000 $ do
     renderTemplate
-    roomSummary conn
+    getRoomSummary conn

@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Api.RoomSummary
-( roomSummary
+( getRoomSummary
 ) where
 
 import Control.Monad.IO.Class (liftIO)
@@ -36,7 +36,7 @@ getSummaryReport transactions users =
     payDiff = snd mostValuableUser - snd payUser
 
 
-roomSummary conn = 
+getRoomSummary conn =
   get "/api/room-summary/:room" $ do
     roomIdParam <- param "room"
     let roomId = read roomIdParam :: Int
