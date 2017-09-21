@@ -11,6 +11,7 @@ import Web.Scotty (get, param, json)
 
 import Db.Types as T
 import Db.Selectors
+import Api.Response
 
 getTransactionsAmount :: [Transaction] -> Int
 getTransactionsAmount transactions = sum $ map price transactions
@@ -45,4 +46,4 @@ getRoomSummary conn =
     let usersIds = map userId transactions
     users <- liftIO $ selectUsers usersIds conn
 
-    json $ getSummaryReport transactions users
+    json $ successResponse $ getSummaryReport transactions users

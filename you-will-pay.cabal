@@ -21,6 +21,7 @@ executable you-will-pay
                      , Db.Selectors
                      , Api.RoomSummary
                      , View.Main
+                     , Api.Response
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , scotty >= 0.11 && < 0.12
