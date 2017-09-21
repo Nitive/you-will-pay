@@ -1,5 +1,4 @@
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DeriveGeneric #-}
 
 module Db.Selectors
 ( selectUsers
@@ -8,7 +7,6 @@ module Db.Selectors
 
 import Database.PostgreSQL.Simple
 import Db.Types
-import GHC.Generics
 
 selectUsers :: [Int] -> Connection -> IO [User]
 selectUsers ids conn = query conn "select color, id, nickname from users where id in ?" $ Only $ In ids

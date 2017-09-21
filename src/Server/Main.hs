@@ -11,10 +11,9 @@ import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import qualified Web.Scotty as S
 
-import Db.Types as T
-import Db.Connection
-import Db.Selectors
 import Api.RoomSummary
+import Api.AddTransaction
+import Db.Connection
 import View.Main
 
 renderTemplate =
@@ -27,3 +26,4 @@ main = do
   S.scotty 3000 $ do
     renderTemplate
     getRoomSummary conn
+    addTransaction conn

@@ -30,6 +30,7 @@ data Transaction = Transaction
   , userId :: Int
   , price :: Int
   , description :: String
+  , roomId :: Int
   } deriving (Generic, Show)
 
 instance FromRow Transaction
