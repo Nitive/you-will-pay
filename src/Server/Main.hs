@@ -1,8 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 module Main where
-import Control.Monad.IO.Class
-import Data.Aeson (Value (Null), (.=), object)
+
+import Control.Monad.IO.Class (liftIO)
+import Data.List (maximumBy, minimumBy)
+
 import Text.Blaze.Html.Renderer.Text (renderHtml)
 import Text.Blaze.Html5 ((!))
 import qualified Text.Blaze.Html5 as H
@@ -12,40 +14,16 @@ import qualified Web.Scotty as S
 import Db.Types as T
 import Db.Connection
 import Db.Selectors
+import Api.RoomSummary
+import View.Main
 
-template = do
-  H.docTypeHtml $ do
-    H.html ! A.lang "en" $ do
-      H.head $ do
-        H.meta ! A.charset "utf-8"
-        H.meta ! A.name "viewport" ! A.content "width=device-width, initial-scale=1.0"
-        H.meta ! A.httpEquiv "X-UA-Compatible" ! A.content "ie=edge"
-        H.title "App"
-      H.body $ do
-        H.script ! A.src "http://localhost:1337/app.js" $ ""
+renderTemplate =
+  S.get "/" $
+    S.html . renderHtml $ mainTemplate
 
 main = do
   conn <- connection
 
   S.scotty 3000 $ do
-    S.get "/" $ do
-      S.html . renderHtml $ template
-
-    S.get "/api/room-summary/:room" $ do
-      roomIdParam <- S.param "room"
-      let roomId = read roomIdParam :: Int
-      users <- liftIO $ selectUsers conn
-
-      S.json RoomSummaryReport
-        { payUserName = "Jon"
-        , payDiff = 10
-        , users = users
-        , history =
-          [ Transaction
-            { time = "Thu Sep 14 2017 10:19:46 GMT+0300 (MSK)"
-            , userId = 1
-            , price = roomId
-            , description = "Дал Арье на карманные расходы"
-            }
-          ]
-        }
+    renderTemplate
+    roomSummary conn

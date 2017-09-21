@@ -9,6 +9,7 @@ module Db.Types
 import Data.Aeson
 import GHC.Generics
 import Database.PostgreSQL.Simple
+import Data.Time (UTCTime(..))
 
 
 data User = User
@@ -25,11 +26,14 @@ instance ToJSON User
 
 
 data Transaction = Transaction
-  { time :: String
+  { created :: UTCTime
   , userId :: Int
   , price :: Int
   , description :: String
   } deriving (Generic, Show)
+
+instance FromRow Transaction
+instance ToRow Transaction
 
 instance FromJSON Transaction
 instance ToJSON Transaction
