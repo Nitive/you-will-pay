@@ -5,8 +5,8 @@ module Api.Response
 , SuccessResponse(..)
 ) where
 
-import Data.Aeson
-import GHC.Generics
+import Data.Aeson (FromJSON, ToJSON)
+import GHC.Generics (Generic(..))
 
 
 data SuccessResponse a = SuccessResponse
@@ -14,7 +14,6 @@ data SuccessResponse a = SuccessResponse
   , result :: a
   } deriving (Generic, Show)
 
-instance FromJSON a => FromJSON (SuccessResponse a)
 instance ToJSON a => ToJSON (SuccessResponse a)
 
 

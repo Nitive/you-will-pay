@@ -6,10 +6,10 @@ module Db.Types
 , Transaction(..)
 ) where
 
-import Data.Aeson
-import GHC.Generics
-import Database.PostgreSQL.Simple
+import Data.Aeson (FromJSON, ToJSON)
 import Data.Time (UTCTime(..))
+import Database.PostgreSQL.Simple
+import GHC.Generics (Generic(..))
 
 
 data User = User

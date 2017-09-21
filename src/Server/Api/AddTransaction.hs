@@ -5,16 +5,13 @@ module Api.AddTransaction
 ( addTransaction
 ) where
 
-import Control.Monad.IO.Class (liftIO)
-
-import Web.Scotty
-import Data.Aeson (ToJSON)
-import GHC.Generics
-
-import Db.Types
-import Db.Inserters
 import Api.Response
-import Debug.Trace
+import Control.Monad.IO.Class (liftIO)
+import Data.Aeson (ToJSON)
+import Db.Inserters
+import Db.Types
+import GHC.Generics (Generic(..))
+import Web.Scotty (put, jsonData, json)
 
 data AddTransactionResult = AddTransactionResult
   { transactionId :: Int } deriving (Generic, Show)
@@ -22,9 +19,7 @@ data AddTransactionResult = AddTransactionResult
 instance ToJSON AddTransactionResult
 
 addTransaction conn =
-  put "/api/add-transaction/" $ do
+  put "/api/add-transaction" $ do
     transaction <- jsonData
-    let t = transaction :: Transaction
-    i <- liftIO $ insertTransaction t conn
-
-    json $ successResponse $ AddTransactionResult { transactionId = i }
+    tranId <- liftIO $ insertTransaction (transaction :: Transaction) conn
+    json $ successResponse $ AddTransactionResult { transactionId = tranId }

@@ -6,8 +6,6 @@ module Db.Inserters
 
 import Database.PostgreSQL.Simple
 import Db.Types
-import Control.Monad.IO.Class
-import GHC.Int
 
 insertTransaction :: Transaction -> Connection -> IO Int
 insertTransaction transaction conn = fromOnly . head <$> result

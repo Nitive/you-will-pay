@@ -4,14 +4,12 @@ module Api.RoomSummary
 ( getRoomSummary
 ) where
 
+import Api.Response
 import Control.Monad.IO.Class (liftIO)
 import Data.List (maximumBy, minimumBy)
-
-import Web.Scotty (get, param, json)
-
-import Db.Types as T
 import Db.Selectors
-import Api.Response
+import Db.Types as T
+import Web.Scotty (get, param, json)
 
 getTransactionsAmount :: [Transaction] -> Int
 getTransactionsAmount transactions = sum $ map price transactions
