@@ -25,7 +25,7 @@ myButton =
   where
 
   initialState :: State
-  initialState = 0
+  initialState = 1
 
   render :: State -> H.ComponentHTML Query
   render state =
