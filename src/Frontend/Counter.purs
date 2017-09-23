@@ -1,4 +1,4 @@
-module Button where
+module Counter where
 
 import Prelude
 import Data.Maybe (Maybe(..))
@@ -14,8 +14,8 @@ data Query a
 
 data Message = Incremented Int
 
-myButton :: forall m. H.Component HH.HTML Query Unit Message m
-myButton =
+counter :: forall m. H.Component HH.HTML Query Unit Message m
+counter =
   H.component
     { initialState: const initialState
     , render
