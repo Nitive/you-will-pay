@@ -1,4 +1,4 @@
-module Counter where
+module UI.Counter where
 
 import Prelude
 import Data.Maybe (Maybe(..))
