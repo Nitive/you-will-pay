@@ -29,14 +29,13 @@ counter =
 
   render :: State -> H.ComponentHTML Query
   render state =
-    let
+    HH.button
+      [ HP.title label
+      , HE.onClick (HE.input_ Increment)
+      ]
+      [ HH.text label ]
+    where
       label = show state
-    in
-      HH.button
-        [ HP.title label
-        , HE.onClick (HE.input_ Increment)
-        ]
-        [ HH.text label ]
 
   eval :: Query ~> H.ComponentDSL State Query Message m
   eval = case _ of
