@@ -17,31 +17,27 @@ data Message = Incremented Int
 counter :: forall m. H.Component HH.HTML Query Unit Message m
 counter =
   H.component
-    { initialState: const initialState
+    { initialState: const 1
     , render
     , eval
     , receiver: const Nothing
     }
   where
+    render :: State -> H.ComponentHTML Query
+    render state =
+      HH.button
+        [ HP.title label
+        , HE.onClick (HE.input_ Increment)
+        ]
+        [ HH.text label ]
+      where
+        label = show state
 
-  initialState :: State
-  initialState = 1
-
-  render :: State -> H.ComponentHTML Query
-  render state =
-    HH.button
-      [ HP.title label
-      , HE.onClick (HE.input_ Increment)
-      ]
-      [ HH.text label ]
-    where
-      label = show state
-
-  eval :: Query ~> H.ComponentDSL State Query Message m
-  eval = case _ of
-    Increment next -> do
-      state <- H.get
-      let nextState = state + 1
-      H.put nextState
-      H.raise $ Incremented nextState
-      pure next
+    eval :: Query ~> H.ComponentDSL State Query Message m
+    eval = case _ of
+      Increment next -> do
+        state <- H.get
+        let nextState = state + 1
+        H.put nextState
+        H.raise $ Incremented nextState
+        pure next

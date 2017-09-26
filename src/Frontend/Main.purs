@@ -2,12 +2,12 @@ module Main where
 
 import Prelude
 import Control.Monad.Eff (Eff)
-import Halogen.Aff as HA
+import Halogen.Aff (HalogenEffects, awaitBody, runHalogenAff)
 import Halogen.VDom.Driver (runUI)
-import UI.Counter (counter)
+import Network.HTTP.Affjax (AJAX)
+import Screens.Room (room)
 
-main :: Eff (HA.HalogenEffects ()) Unit
-main = HA.runHalogenAff do
-  body <- HA.awaitBody
-  runUI counter unit body
-
+main :: Eff (HalogenEffects (ajax :: AJAX)) Unit
+main = runHalogenAff do
+  body <- awaitBody
+  runUI room unit body

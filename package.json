@@ -12,6 +12,7 @@
     "init_local_db": "sh init_local_db/init_local_db.sh",
     "server": "stack build --exec you-will-pay",
     "static-server": "pulp server",
+    "pulp": "pulp",
     "start": "concurrently -r \"npm run server\" \"npm run static-server\""
   },
   "license": "UNLICENSED"
