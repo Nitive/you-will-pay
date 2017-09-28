@@ -36,7 +36,7 @@ getSummaryReport transactions users =
 
 
 getRoomSummary conn =
-  get "/api/room-summary/:room" $ do
+  get "/api/room/:room/summary" $ do
     roomIdParam <- param "room"
     let roomId = read roomIdParam :: Int
 
