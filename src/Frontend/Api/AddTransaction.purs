@@ -1,25 +1,11 @@
 module Api.AddTransaction where
 
-import Control.Monad.Aff (Aff)
+import Api.Response (SuccessResponse)
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
-import Data.Maybe (Maybe(..))
-import Data.MediaType.Common (applicationJSON)
-import Data.Tuple (Tuple(..))
-import Network.HTTP.Affjax (AJAX, AffjaxResponse, put)
+import Network.HTTP.Affjax (Affjax, put)
 import Network.HTTP.Affjax.Request (class Requestable, toRequest)
-import Network.HTTP.Affjax.Response (class Respondable, ResponseType(JSONResponse))
-import Prelude (pure, ($), (<<<))
-import Unsafe.Coerce (unsafeCoerce)
-
-newtype SuccessResponse t = SuccessResponse
-  { status :: String
-  , result :: t
-  }
-
-instance respondableSuccessResponse :: Respondable (SuccessResponse a) where
-  responseType = Tuple (Just applicationJSON) JSONResponse
-  fromResponse = pure <<< unsafeCoerce
+import Prelude (($))
 
 newtype AddTransactionResponse = AddTransactionResponse
   { transactionId :: Int
@@ -45,5 +31,5 @@ instance encodeJsonAddTransactionRequest :: EncodeJson AddTransactionRequest whe
 instance requestableAddTransactionRequest :: Requestable AddTransactionRequest where
   toRequest req = toRequest $ encodeJson req
 
-addTransaction :: forall eff. AddTransactionRequest -> Aff (ajax :: AJAX | eff) (AffjaxResponse (SuccessResponse AddTransactionResponse))
+addTransaction :: forall eff. AddTransactionRequest -> Affjax eff (SuccessResponse AddTransactionResponse)
 addTransaction = put "http://localhost:3000/api/add-transaction"
