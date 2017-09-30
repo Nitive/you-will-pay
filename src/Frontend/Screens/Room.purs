@@ -1,6 +1,6 @@
 module Screens.Room where
 
-import Api.GetSummary (getSummary, GetSummaryResponse(..))
+import Api.GetSummary (getSummary)
 import Api.Response (SuccessResponse(..))
 import Components.AddTransactionForm as ATF
 import Data.Maybe (Maybe(..))
@@ -74,10 +74,9 @@ room =
       H.modify (_ { loading = true })
       req <- H.liftAff $ getSummary 1
       let (SuccessResponse res) = req.response
-      let (GetSummaryResponse result) = res.result
 
-      let summary = { payUser: { name: result.payUserName, color: "tomato" }
-                    , payDiff: result.payDiff
+      let summary = { payUser: { name: res.result.payUserName, color: "tomato" }
+                    , payDiff: res.result.payDiff
                     , users: []
                     , history: []
                     } :: Summary

@@ -18,7 +18,7 @@ type Transaction =
   , description :: String
   }
 
-newtype GetSummaryResponse = GetSummaryResponse
+type GetSummaryResponse =
   { payUserName :: String
   , payDiff :: Int
   , users :: Array User

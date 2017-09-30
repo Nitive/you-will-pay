@@ -7,7 +7,7 @@ import Network.HTTP.Affjax (Affjax, put)
 import Network.HTTP.Affjax.Request (class Requestable, toRequest)
 import Prelude (($))
 
-newtype AddTransactionResponse = AddTransactionResponse
+type AddTransactionResponse =
   { transactionId :: Int
   }
 
