@@ -37,8 +37,10 @@ type Summary =
   , history :: Array Transaction
   }
 
+data Status = Pending | Loaded
+
 type State =
-  { loading :: Boolean
+  { status :: Status
   , summary :: Maybe Summary
   }
 
@@ -89,7 +91,7 @@ room =
 
   initialState :: State
   initialState =
-    { loading: true
+    { status: Pending
     , summary: Nothing
     }
 
@@ -99,8 +101,8 @@ room =
 
   render :: State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
   render state =
-    case state.loading of
-      false ->
+    case state.status of
+      Loaded ->
         case state.summary of
           Just summary ->
             HH.div_
@@ -111,12 +113,12 @@ room =
               ]
           Nothing ->
             HH.div [ style errorStyle ] [ HH.text "Error..." ]
-      true ->
-        HH.text "Loading..."
+      Pending ->
+        HH.text "status..."
 
   eval :: Query ~> H.ParentDSL State Query ATF.Query Slot Void (ComponentEffects eff)
   eval (GetSummary next) = do
-    H.modify (_ { loading = true })
+    H.modify (_ { status = Pending })
     res <- H.liftAff $ getSummary 1
-    H.modify (_ { loading = false, summary = responseToSummary res })
+    H.modify (_ { status = Loaded, summary = responseToSummary res })
     pure next
