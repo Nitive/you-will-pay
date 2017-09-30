@@ -4,7 +4,6 @@ module Api.RoomSummary
 ( getRoomSummary
 ) where
 
-import Api.Response
 import Control.Monad.IO.Class (liftIO)
 import Data.List (maximumBy, minimumBy)
 import Db.Selectors
@@ -44,4 +43,4 @@ getRoomSummary conn =
     let usersIds = map userId transactions
     users <- liftIO $ selectUsers usersIds conn
 
-    json $ successResponse $ getSummaryReport transactions users
+    json $ getSummaryReport transactions users

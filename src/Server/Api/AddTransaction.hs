@@ -5,7 +5,6 @@ module Api.AddTransaction
 ( addTransaction
 ) where
 
-import Api.Response
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (ToJSON)
 import Db.Inserters
@@ -22,4 +21,4 @@ addTransaction conn =
   put "/api/add-transaction" $ do
     transaction <- jsonData
     tranId <- liftIO $ insertTransaction (transaction :: Transaction) conn
-    json $ successResponse $ AddTransactionResult { transactionId = tranId }
+    json $ AddTransactionResult { transactionId = tranId }

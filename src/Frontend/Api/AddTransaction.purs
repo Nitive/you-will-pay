@@ -1,15 +1,12 @@
 module Api.AddTransaction where
 
-import Api.Response (SuccessResponse)
+import Api.Response (gFromResponse, gResponseType)
 import Data.Argonaut.Core (jsonEmptyObject)
 import Data.Argonaut.Encode (class EncodeJson, encodeJson, (:=), (~>))
 import Network.HTTP.Affjax (Affjax, put)
 import Network.HTTP.Affjax.Request (class Requestable, toRequest)
+import Network.HTTP.Affjax.Response (class Respondable)
 import Prelude (($))
-
-type AddTransactionResponse =
-  { transactionId :: Int
-  }
 
 newtype AddTransactionRequest = AddTransactionRequest
   { created :: String
@@ -31,5 +28,13 @@ instance encodeJsonAddTransactionRequest :: EncodeJson AddTransactionRequest whe
 instance requestableAddTransactionRequest :: Requestable AddTransactionRequest where
   toRequest req = toRequest $ encodeJson req
 
-addTransaction :: forall eff. AddTransactionRequest -> Affjax eff (SuccessResponse AddTransactionResponse)
+newtype AddTransactionResponse = AddTransactionResponse
+  { transactionId :: Int
+  }
+
+instance respondableAddTransactionResponse :: Respondable AddTransactionResponse where
+  responseType = gResponseType
+  fromResponse = gFromResponse
+
+addTransaction :: forall eff. AddTransactionRequest -> Affjax eff AddTransactionResponse
 addTransaction = put "http://localhost:3000/api/add-transaction"

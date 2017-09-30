@@ -2,8 +2,7 @@ module Components.AddTransactionForm where
 
 import Prelude
 
-import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse, addTransaction)
-import Api.Response (SuccessResponse(..))
+import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse(..), addTransaction)
 import Control.Monad.Eff.Now (now)
 import DOM.Event.Event (Event, preventDefault)
 import Data.DateTime.Instant (toDateTime)
@@ -69,8 +68,8 @@ addTransactionForm =
             }
 
         res <- H.liftAff $ addTransaction request
-        let (SuccessResponse response) = (res.response :: SuccessResponse AddTransactionResponse)
-        let summary = { transactionId: response.result.transactionId } :: Summary
+        let (AddTransactionResponse result) = res.response
+        let summary = { transactionId: result.transactionId } :: Summary
         H.modify (_ { loading = false, summary = Just summary })
         pure next
 

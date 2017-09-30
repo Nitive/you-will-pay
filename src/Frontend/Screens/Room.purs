@@ -1,12 +1,14 @@
 module Screens.Room where
 
-import Api.GetSummary (getSummary)
-import Api.Response (SuccessResponse(..))
+import Prelude
+
+import Api.GetSummary (GetSummaryResponse(..), getSummary)
 import Components.AddTransactionForm as ATF
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
-import Prelude
+import Network.HTTP.Affjax (AffjaxResponse)
+import Network.HTTP.StatusCode (StatusCode(..))
 import Types (ComponentEffects)
 
 data Query a
@@ -37,6 +39,17 @@ type State =
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
 derive instance ordATFSlot :: Ord Slot
+
+responseToSummary :: AffjaxResponse GetSummaryResponse -> Maybe Summary
+responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result) } = Just
+  { payUser
+  , payDiff: result.payDiff
+  , users: []
+  , history: []
+  }
+  where
+    payUser = { name: result.payUserName, color: "tomato" }
+responseToSummary _ = Nothing
 
 room :: forall eff. H.Component HH.HTML Query Unit Void (ComponentEffects eff)
 room =
@@ -72,13 +85,6 @@ room =
   eval = case _ of
     GetSummary next -> do
       H.modify (_ { loading = true })
-      req <- H.liftAff $ getSummary 1
-      let (SuccessResponse res) = req.response
-
-      let summary = { payUser: { name: res.result.payUserName, color: "tomato" }
-                    , payDiff: res.result.payDiff
-                    , users: []
-                    , history: []
-                    } :: Summary
-      H.modify (_ { loading = false, summary = Just summary })
+      res <- H.liftAff $ getSummary 1
+      H.modify (_ { loading = false, summary = responseToSummary res })
       pure next
