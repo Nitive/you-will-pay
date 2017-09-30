@@ -1,14 +1,16 @@
 module Screens.Room where
 
-import Prelude
-
 import Api.GetSummary (GetSummaryResponse(..), getSummary)
+import CSS (StyleM, color)
+import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.CSS (style)
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
+import Prelude (class Eq, class Ord, type (~>), Unit, Void, bind, const, discard, pure, show, unit, ($), (<>))
 import Types (ComponentEffects)
 
 data Query a
@@ -39,6 +41,10 @@ type State =
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
 derive instance ordATFSlot :: Ord Slot
+
+errorStyle :: StyleM Unit
+errorStyle = do
+  color red
 
 responseToSummary :: AffjaxResponse GetSummaryResponse -> Maybe Summary
 responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result) } = Just
@@ -71,14 +77,18 @@ room =
 
   render :: State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
   render state =
-    case state.summary of
-      Just summary ->
-        HH.div_
-          [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff)
-          , HH.h1_ [ HH.text "room" ]
-          , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
-          ]
-      Nothing ->
+    case state.loading of
+      false ->
+        case state.summary of
+          Just summary ->
+            HH.div_
+              [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff)
+              , HH.h1_ [ HH.text "room" ]
+              , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
+              ]
+          Nothing ->
+            HH.div [ style errorStyle ] [ HH.text "Error..." ]
+      true ->
         HH.text "Loading..."
 
   eval :: Query ~> H.ParentDSL State Query ATF.Query Slot Void (ComponentEffects eff)

@@ -1,7 +1,5 @@
 module Components.AddTransactionForm where
 
-import Prelude
-
 import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse(..), addTransaction)
 import Control.Monad.Eff.Now (now)
 import DOM.Event.Event (Event, preventDefault)
@@ -13,6 +11,7 @@ import Halogen (liftEff)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
+import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<>))
 import Types (ComponentEffects)
 
 
