@@ -19,10 +19,10 @@ getUserTransactions transactions user = filter (\transaction -> userId transacti
 getSummaryReport :: [Transaction] -> [User] -> RoomSummaryReport
 getSummaryReport transactions users =
   RoomSummaryReport
-    { payUserName = payUserName
+    { payUserId = payUserId
     , payDiff = payDiff
     , users = users
-    , history = transactions
+    , history = take 10 transactions
     }
   where
     transactionsAmounts = map (getTransactionsAmount . getUserTransactions transactions) users
@@ -30,7 +30,7 @@ getSummaryReport transactions users =
     sortByTransactionAmount x y = compare (snd x) (snd y)
     payUser = minimumBy sortByTransactionAmount usersWithTransactionAmount
     mostValuableUser = maximumBy sortByTransactionAmount usersWithTransactionAmount
-    payUserName = name $ fst payUser
+    payUserId = T.id $ fst payUser
     payDiff = snd mostValuableUser - snd payUser
 
 

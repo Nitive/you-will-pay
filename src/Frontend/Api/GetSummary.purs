@@ -20,7 +20,7 @@ type Transaction =
   }
 
 newtype GetSummaryResponse = GetSummaryResponse
-  { payUserName :: String
+  { payUserId :: Int
   , payDiff :: Int
   , users :: Array User
   , history :: Array Transaction

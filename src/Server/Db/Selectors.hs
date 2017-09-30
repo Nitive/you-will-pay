@@ -12,4 +12,4 @@ selectUsers :: [Int] -> Connection -> IO [User]
 selectUsers ids conn = query conn "select color, id, nickname from users where id in ?" $ Only $ In ids
 
 selectTransactions :: Int -> Connection -> IO [Transaction]
-selectTransactions room conn = query conn "select created, user_id, price, summary, room_id from transactions where room_id = ? order by created desc limit 10" $ Only room
+selectTransactions room conn = query conn "select created, user_id, price, summary, room_id from transactions where room_id = ? order by created desc" $ Only room

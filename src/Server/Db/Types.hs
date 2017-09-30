@@ -41,7 +41,7 @@ instance ToJSON Transaction
 
 
 data RoomSummaryReport = RoomSummaryReport
-  { payUserName :: String
+  { payUserId :: Int
   , payDiff :: Int
   , users :: [User]
   , history :: [Transaction]

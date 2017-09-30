@@ -4,13 +4,15 @@ import Api.GetSummary (GetSummaryResponse(..), getSummary)
 import CSS (StyleM, color)
 import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
+import Data.Foldable (find)
 import Data.Maybe (Maybe(..))
+import Data.Traversable (sequence)
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
-import Prelude (class Eq, class Ord, type (~>), Unit, Void, bind, const, discard, pure, show, unit, ($), (<>))
+import Prelude (class Eq, class Ord, type (~>), Unit, Void, bind, const, discard, pure, show, unit, ($), (<$>), (<*>), (<>), (==))
 import Types (ComponentEffects)
 
 data Query a
@@ -19,6 +21,7 @@ data Query a
 type User =
   { name :: String
   , color :: String
+  , id :: Int
   }
 
 type Transaction =
@@ -47,14 +50,27 @@ errorStyle = do
   color red
 
 responseToSummary :: AffjaxResponse GetSummaryResponse -> Maybe Summary
-responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result) } = Just
-  { payUser
-  , payDiff: result.payDiff
-  , users: []
-  , history: []
-  }
+responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result) } = summary
   where
-    payUser = { name: result.payUserName, color: "tomato" }
+    payUser = find (\x -> x.id == result.payUserId) result.users
+
+    parseTransaction tr = parse <$> user
+      where
+        user = find (\x -> x.id == tr.userId) result.users
+        parse u =
+          { user: u
+          , price: tr.price
+          }
+
+    transactions = sequence $ parseTransaction <$> result.history
+
+    parseSummary user history =
+      { payUser: user
+      , payDiff: result.payDiff
+      , users: result.users
+      , history: history
+      }
+    summary = parseSummary <$> payUser <*> transactions
 responseToSummary _ = Nothing
 
 room :: forall eff. H.Component HH.HTML Query Unit Void (ComponentEffects eff)
@@ -75,6 +91,10 @@ room =
     , summary: Nothing
     }
 
+  renderTransaction tr = HH.li_
+    [ HH.text $ tr.user.name <> ": " <> (show tr.price)
+    ]
+
   render :: State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
   render state =
     case state.loading of
@@ -85,6 +105,7 @@ room =
               [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff)
               , HH.h1_ [ HH.text "room" ]
               , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
+              , HH.ul_ $ renderTransaction <$> summary.history
               ]
           Nothing ->
             HH.div [ style errorStyle ] [ HH.text "Error..." ]
