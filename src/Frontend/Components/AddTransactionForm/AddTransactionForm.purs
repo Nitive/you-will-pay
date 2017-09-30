@@ -16,7 +16,7 @@ import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
-import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<>))
+import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<*>), (<>))
 import Types (ComponentEffects)
 
 
@@ -31,25 +31,28 @@ type State =
   , report :: Maybe Report
   , price :: String
   , description :: String
+  , payUserId :: String
   }
 
 data Query a
   = SubmitForm Event a
   | SetPrice String a
   | SetDescription String a
+  | SetPayUserId String a
 
 stateToRequest :: DateTime -> State -> Maybe AddTransactionRequest
-stateToRequest created state = createRequest <$> price
+stateToRequest created state = createRequest <$> price <*> payUserId
     where
-      createRequest price =
+      createRequest price userId =
         AddTransactionRequest
           { created: either id id $ formatDateTime "YYYY-MM-DD hh:mm:ss+03" created
-          , userId: 2
+          , userId
           , price
           , description: state.description
           , roomId: 1
           }
       price = fromString state.price
+      payUserId = fromString state.payUserId
 
 responseToReport :: AffjaxResponse AddTransactionResponse -> Maybe Report
 responseToReport { status: StatusCode 200, response: (AddTransactionResponse result) } = Just result
@@ -70,6 +73,7 @@ addTransactionForm =
       , report: Nothing
       , price: ""
       , description: ""
+      , payUserId: ""
       }
 
     render :: State -> H.ComponentHTML Query
@@ -82,6 +86,13 @@ addTransactionForm =
             Nothing ->
               HH.form [ HE.onSubmit (HE.input SubmitForm) ]
                 [ HH.label_
+                  [ HH.text "User ID: "
+                  , HH.input
+                    [ HP.value state.payUserId
+                    , HE.onValueInput (HE.input SetPayUserId)
+                    ]
+                  ]
+                , HH.label_
                   [ HH.text "Price: "
                   , HH.input
                     [ HP.value state.price
@@ -122,4 +133,8 @@ addTransactionForm =
 
     eval (SetDescription description next) = do
       H.modify (_ { description = description })
+      pure next
+
+    eval (SetPayUserId payUserId next) = do
+      H.modify (_ { payUserId = payUserId })
       pure next
