@@ -27,6 +27,7 @@ type User =
 type Transaction =
   { user :: User
   , price :: Int
+  , description :: String
   }
 
 type Summary =
@@ -60,6 +61,7 @@ responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result
         parse u =
           { user: u
           , price: tr.price
+          , description: tr.description
           }
 
     transactions = sequence $ parseTransaction <$> result.history
@@ -92,7 +94,7 @@ room =
     }
 
   renderTransaction tr = HH.li_
-    [ HH.text $ tr.user.name <> ": " <> (show tr.price)
+    [ HH.text $ tr.user.name <> ": " <> (show tr.price) <> " (" <> tr.description <> ")"
     ]
 
   render :: State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
@@ -103,7 +105,7 @@ room =
           Just summary ->
             HH.div_
               [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff)
-              , HH.h1_ [ HH.text "room" ]
+              , HH.h1_ [ HH.text "room #1" ]
               , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
               , HH.ul_ $ renderTransaction <$> summary.history
               ]
