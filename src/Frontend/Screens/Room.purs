@@ -115,9 +115,8 @@ room =
         HH.text "Loading..."
 
   eval :: Query ~> H.ParentDSL State Query ATF.Query Slot Void (ComponentEffects eff)
-  eval = case _ of
-    GetSummary next -> do
-      H.modify (_ { loading = true })
-      res <- H.liftAff $ getSummary 1
-      H.modify (_ { loading = false, summary = responseToSummary res })
-      pure next
+  eval (GetSummary next) = do
+    H.modify (_ { loading = true })
+    res <- H.liftAff $ getSummary 1
+    H.modify (_ { loading = false, summary = responseToSummary res })
+    pure next

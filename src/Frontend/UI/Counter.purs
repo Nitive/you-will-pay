@@ -34,10 +34,9 @@ counter =
         label = show state
 
     eval :: Query ~> H.ComponentDSL State Query Message m
-    eval = case _ of
-      Increment next -> do
-        state <- H.get
-        let nextState = state + 1
-        H.put nextState
-        H.raise $ Incremented nextState
-        pure next
+    eval (Increment next) = do
+      state <- H.get
+      let nextState = state + 1
+      H.put nextState
+      H.raise $ Incremented nextState
+      pure next

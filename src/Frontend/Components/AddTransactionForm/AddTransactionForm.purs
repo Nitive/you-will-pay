@@ -101,26 +101,25 @@ addTransactionForm =
           HH.text "Pending..."
 
     eval :: Query ~> H.ComponentDSL State Query Void (ComponentEffects eff)
-    eval = case _ of
-      SubmitForm event next -> do
-        liftEff $ preventDefault event
+    eval (SubmitForm event next) = do
+      liftEff $ preventDefault event
 
-        created <- liftEff $ toDateTime <$> now
-        state <- H.get
-        let request = stateToRequest created state
-        case request of
-          Just req -> do
-            H.modify (_ { status = Pending })
-            res <- H.liftAff $ addTransaction req
-            H.modify (_ { status = Loaded, report = responseToReport res })
-          Nothing -> do
-            H.modify (_ { status = Loaded })
-        pure next
+      created <- liftEff $ toDateTime <$> now
+      state <- H.get
+      let request = stateToRequest created state
+      case request of
+        Just req -> do
+          H.modify (_ { status = Pending })
+          res <- H.liftAff $ addTransaction req
+          H.modify (_ { status = Loaded, report = responseToReport res })
+        Nothing -> do
+          H.modify (_ { status = Loaded })
+      pure next
 
-      SetPrice price next -> do
-        H.modify (_ { price = price })
-        pure next
+    eval (SetPrice price next) = do
+      H.modify (_ { price = price })
+      pure next
 
-      SetDescription description next -> do
-        H.modify (_ { description = description })
-        pure next
+    eval (SetDescription description next) = do
+      H.modify (_ { description = description })
+      pure next
