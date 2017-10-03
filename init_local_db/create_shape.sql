@@ -1,0 +1,38 @@
+REVOKE CONNECT ON DATABASE ywp_db FROM PUBLIC;
+GRANT CONNECT ON DATABASE ywp_db TO ywp_user;
+
+CREATE TABLE IF NOT EXISTS rooms (
+  color VARCHAR(256) NOT NULL,
+  id SERIAL NOT NULL, PRIMARY KEY (id),
+  title VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS users (
+  color VARCHAR(256) NOT NULL,
+  id SERIAL NOT NULL, PRIMARY KEY (id),
+  nickname VARCHAR(256) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+  created timestamptz NOT NULL,
+  id SERIAL NOT NULL, PRIMARY KEY (id),
+  price int NOT NULL,
+  room_id int NOT NULL, FOREIGN KEY (room_id) REFERENCES rooms(id),
+  summary VARCHAR(256) NOT NULL,
+  user_id int NOT NULL, FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+REVOKE ALL
+  ON ALL TABLES
+  IN SCHEMA public
+  FROM PUBLIC;
+
+GRANT SELECT, INSERT
+  ON ALL TABLES
+  IN SCHEMA public
+  TO ywp_user;
+
+GRANT USAGE, SELECT
+  ON ALL SEQUENCES
+  IN SCHEMA public
+  TO ywp_user;

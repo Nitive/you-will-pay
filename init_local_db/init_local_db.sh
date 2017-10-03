@@ -7,4 +7,5 @@ dropuser ywp_user || true
 createuser ywp_user
 
 # create tables and insert data
+psql -f init_local_db/create_shape.sql ywp_db
 psql -f init_local_db/create_data.sql ywp_db
