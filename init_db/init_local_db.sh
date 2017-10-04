@@ -3,8 +3,8 @@ dropuser ywp_user || true
 createuser ywp_user
 
 # create db (remove if exist)
-dropdb ywp_db --username=ywp_user || true
-createdb ywp_db --username=ywp_user
+dropdb ywp_db || true
+createdb ywp_db
 
 # create tables and insert data
 psql -f init_db/create_shape.sql ywp_db
