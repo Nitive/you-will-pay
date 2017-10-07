@@ -1,3 +1,5 @@
+cd `dirname $0`
+
 # create user (skip if exist)
 createuser ywp_user || true
 
@@ -5,4 +7,4 @@ createuser ywp_user || true
 createdb ywp_db || true
 
 # create tables
-psql -f init_db/create_shape.sql ywp_db
+psql -f create_shape.sql ywp_db
