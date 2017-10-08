@@ -43,11 +43,11 @@ data Query a
 stateToRequest :: DateTime -> State -> Maybe AddTransactionRequest
 stateToRequest created state = createRequest <$> price <*> payUserId
     where
-      createRequest price userId =
+      createRequest price' userId =
         AddTransactionRequest
           { created: either id id $ formatDateTime "YYYY-MM-DD hh:mm:ss+03" created
           , userId
-          , price
+          , price: price'
           , description: state.description
           , roomId: 1
           }
