@@ -1,7 +1,8 @@
 module Screens.Room where
 
 import Api.GetSummary (GetSummaryResponse(..), getSummary)
-import CSS (StyleM, color)
+import CSS (StyleM, backgroundColor, color, fontSize, px, rgb, white)
+import CSS.TextAlign (textAlign, center)
 import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
 import Data.Foldable (find)
@@ -47,6 +48,21 @@ type State =
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
 derive instance ordATFSlot :: Ord Slot
+
+screenStyle :: StyleM Unit
+screenStyle = do
+  color white
+  backgroundColor $ rgb 0x37 0x37 0x37
+
+headerStyle :: StyleM Unit
+headerStyle = do
+  backgroundColor $ rgb 0x49 0x90 0xE2
+  fontSize $ px 10.0
+
+userPaysStyle :: StyleM Unit
+userPaysStyle = do
+  textAlign center
+  fontSize $ px 24.0
 
 errorStyle :: StyleM Unit
 errorStyle = do
@@ -105,9 +121,10 @@ room =
       Loaded ->
         case state.summary of
           Just summary ->
-            HH.div_
-              [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff)
-              , HH.h1_ [ HH.text "room #1" ]
+            HH.div [ style screenStyle ]
+              [ HH.header [ style headerStyle ] [ HH.text "Matrix" ]
+              , HH.p [ style userPaysStyle ]
+                [ HH.text $ summary.payUser.name <> " " <> (show summary.payDiff) ]
               , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
               , HH.ul_ $ renderTransaction <$> summary.history
               ]
