@@ -1,0 +1,21 @@
+name: you-will-pay
+version: '0.1.0.0'
+category: Web
+author: Maxim Samoilov
+maintainer: nitive@icloud.com
+copyright: 2017 Maxim Samoilov
+homepage: https://github.com/Nitive/you-will-pay#readme
+
+dependencies:
+  - base >=4.7 && <5
+  - scotty >=0.11 && <0.12
+  - blaze-html >=0.9.0.1 && <0.10
+  - aeson >=1.1.2 && <1.2
+  - postgresql-simple >=0.5.3 && <0.6
+  - text >=1.2 && <1.3
+  - time >=1.6 && <1.7
+
+executables:
+  ywp:
+    main: Main.hs
+    source-dirs: src/Server
