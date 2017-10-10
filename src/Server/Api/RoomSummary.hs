@@ -40,7 +40,6 @@ getRoomSummary conn =
     let roomId = read roomIdParam :: Int
 
     transactions <- liftIO $ selectTransactions roomId conn
-    let usersIds = map userId transactions
-    users <- liftIO $ selectUsers usersIds conn
+    users <- liftIO $ selectAllUsers conn
 
     json $ getSummaryReport transactions users
