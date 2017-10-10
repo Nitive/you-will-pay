@@ -8,4 +8,10 @@ module Db.Connection
 import Database.PostgreSQL.Simple
 
 connection :: IO Connection
-connection = connectPostgreSQL "dbname='ywp_db' user='ywp_user'"
+connection = connect $ ConnectInfo
+  { connectHost = "localhost"
+  , connectPort = 5432
+  , connectUser = "ywp_user"
+  , connectPassword = ""
+  , connectDatabase = "ywp_db"
+  }
