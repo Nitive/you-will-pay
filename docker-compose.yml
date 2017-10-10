@@ -33,4 +33,4 @@ services:
       context: .
       dockerfile: ./docker/ywp_nginx/Dockerfile
     ports:
-      - '8000:80'
+      - '80:80'
