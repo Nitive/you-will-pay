@@ -18,5 +18,10 @@ ENV PATH /opt/purescript:$PATH
 
 COPY . /opt/ywp_frontend
 
-CMD ["pulp","server","--host","0.0.0.0"]
+RUN mkdir -p /opt/public/assets \
+    && pulp browserify > /opt/public/assets/app.js
+
+WORKDIR /opt/public
+
+CMD ["python","-m","SimpleHTTPServer","1337"]
 EXPOSE 1337

@@ -6,29 +6,31 @@ services:
     build:
       context: .
       dockerfile: ./docker/ywp_db/Dockerfile
-    ports:
-      - '5432:5432'
 
   server:
     container_name: ywp_server
     build:
       context: .
       dockerfile: ./docker/ywp_server/Dockerfile
-    links:
-      - db
-    ports:
-      - '3333:3000'
+    environment:
+      DB_HOST: 'ywp_db'
 
   frontend:
     container_name: ywp_frontend
     build:
       context: .
       dockerfile: ./docker/ywp_frontend/Dockerfile
-    ports:
-      - '1337:1337'
 
   jenkins:
     container_name: ywp_jenkins
     image: jenkinsci/blueocean
     ports:
-      - '9090:8080'
+      - '8080:8080'
+
+  nginx:
+    container_name: ywp_nginx
+    build:
+      context: .
+      dockerfile: ./docker/ywp_nginx/Dockerfile
+    ports:
+      - '8000:80'

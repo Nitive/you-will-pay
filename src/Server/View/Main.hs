@@ -18,4 +18,4 @@ mainTemplate =
         meta ! httpEquiv "X-UA-Compatible" ! content "ie=edge"
         H.title "App"
       body $
-        script ! src "http://localhost:1337/app.js" $ ""
+        script ! src "/assets/app.js" $ ""
