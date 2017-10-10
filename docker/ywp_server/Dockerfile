@@ -6,7 +6,7 @@ COPY ./stack.yaml /opt/ywp_server/stack.yaml
 RUN stack setup
 
 COPY ./package.yaml /opt/ywp_server/package.yaml
-RUN stack build --fast --only-dependencies
+RUN stack build --only-dependencies
 
 COPY ./src/Server /opt/ywp_server/src/Server/
 RUN stack build
