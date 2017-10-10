@@ -31,4 +31,4 @@ instance respondableGetSummaryResponse :: Respondable GetSummaryResponse where
   fromResponse = gFromResponse
 
 getSummary :: forall eff. Int -> Affjax eff GetSummaryResponse
-getSummary roomId = get $ "http://localhost:3000/api/room/" <> (show roomId) <> "/summary"
+getSummary roomId = get $ "/api/room/" <> (show roomId) <> "/summary"

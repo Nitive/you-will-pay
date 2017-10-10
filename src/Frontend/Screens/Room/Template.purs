@@ -78,7 +78,7 @@ roomTemplate state =
           HH.div [ style errorStyle ] [ HH.text "Error..." ]
 
     Pending ->
-      HH.text "status..."
+      HH.text "Loading..."
 
   where
     renderTransaction tr = HH.li_

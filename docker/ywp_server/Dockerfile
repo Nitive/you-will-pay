@@ -5,9 +5,11 @@ WORKDIR /opt/ywp_server
 COPY ./stack.yaml /opt/ywp_server/stack.yaml
 RUN stack setup
 
-COPY . /opt/ywp_server
-RUN stack install
+COPY ./package.yaml /opt/ywp_server/package.yaml
+RUN stack build --fast --only-dependencies
+
+COPY ./src/Server /opt/ywp_server/src/Server/
 RUN stack build
 
-CMD ["stack", "exec", "you-will-pay"]
+CMD ["stack","exec","ywp"]
 EXPOSE 3000

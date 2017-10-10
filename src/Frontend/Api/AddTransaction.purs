@@ -37,4 +37,4 @@ instance respondableAddTransactionResponse :: Respondable AddTransactionResponse
   fromResponse = gFromResponse
 
 addTransaction :: forall eff. AddTransactionRequest -> Affjax eff AddTransactionResponse
-addTransaction = put "http://localhost:3000/api/add-transaction"
+addTransaction = put "/api/add-transaction"

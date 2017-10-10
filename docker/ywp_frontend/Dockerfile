@@ -18,5 +18,5 @@ ENV PATH /opt/purescript:$PATH
 
 COPY . /opt/ywp_frontend
 
-CMD ["pulp", "server"]
+CMD ["pulp","server","--host","0.0.0.0"]
 EXPOSE 1337

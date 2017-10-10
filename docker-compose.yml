@@ -1,21 +1,26 @@
 version: '2'
 
 services:
-  ywp_db:
+  db:
+    container_name: ywp_db
     build:
       context: .
       dockerfile: ./docker/ywp_db/Dockerfile
+    ports:
+      - '5432:5432'
 
-  ywp_server:
+  server:
+    container_name: ywp_server
     build:
       context: .
       dockerfile: ./docker/ywp_server/Dockerfile
     links:
-      - ywp_db
+      - db
     ports:
-      - '3000:3000'
+      - '3333:3000'
 
-  ywp_frontend:
+  frontend:
+    container_name: ywp_frontend
     build:
       context: .
       dockerfile: ./docker/ywp_frontend/Dockerfile
@@ -23,6 +28,7 @@ services:
       - '1337:1337'
 
   jenkins:
+    container_name: ywp_jenkins
     image: jenkinsci/blueocean
     ports:
-      - '8080:9090'
+      - '9090:8080'
