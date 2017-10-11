@@ -7,7 +7,6 @@ module Db.Connection
 
 import Database.PostgreSQL.Simple
 import System.Environment (getEnv)
-import Control.Monad (liftM)
 
 connection :: IO Connection
 connection = do

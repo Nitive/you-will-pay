@@ -14,6 +14,7 @@ services:
       dockerfile: ./docker/ywp_server/Dockerfile
     environment:
       DB_HOST: 'ywp_db'
+      ASSETS_PATH: '/assets/'
 
   frontend:
     container_name: ywp_frontend

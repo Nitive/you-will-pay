@@ -8,8 +8,8 @@ import Text.Blaze.Html5 ((!))
 import Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes as A
 
-mainTemplate :: Html
-mainTemplate =
+mainTemplate :: String -> Html
+mainTemplate assetsPath =
   docTypeHtml $
     html ! lang "en" $ do
       H.head $ do
@@ -18,4 +18,6 @@ mainTemplate =
         meta ! httpEquiv "X-UA-Compatible" ! content "ie=edge"
         H.title "App"
       body $
-        script ! src "/assets/app.js" $ ""
+        script ! src jsEntry $ ""
+  where
+    jsEntry = stringValue $ assetsPath ++ "app.js"
