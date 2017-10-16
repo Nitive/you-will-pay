@@ -11,7 +11,7 @@
   "scripts": {
     "deps": "stack setup && stack build --only-dependencies && npm install && bower install",
     "init_local_db": "sh init_db/init_local_db.sh",
-    "server": "env-cmd env/.local stack build --exec ywp",
+    "server": "env-cmd env/test_remote_db stack build --exec ywp",
     "static-server": "pulp server",
     "pulp": "pulp",
     "start": "concurrently -r \"npm run server\" \"npm run static-server\""

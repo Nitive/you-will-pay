@@ -22,8 +22,6 @@ services:
     build:
       context: .
       dockerfile: ./docker/ywp_server/Dockerfile
-    depends_on:
-      - db
     environment:
       DB_HOST: 'ywp_db'
       DB_PORT: '5432'
