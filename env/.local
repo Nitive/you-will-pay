@@ -1,0 +1,3 @@
+DB_HOST=82.196.3.62
+DB_PORT=4005
+ASSETS_PATH=http://localhost:1337/

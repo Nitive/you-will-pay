@@ -7,13 +7,27 @@ services:
       context: .
       dockerfile: ./docker/ywp_db/Dockerfile
 
+  test_db:
+    container_name: ywp_test_db
+    build:
+      context: .
+      dockerfile: ./docker/ywp_test_db/Dockerfile
+    environment:
+      - POSTGRES_PASSWORD
+    ports:
+      - '4005:5432'
+
   server:
     container_name: ywp_server
     build:
       context: .
       dockerfile: ./docker/ywp_server/Dockerfile
+    depends_on:
+      - db
     environment:
       DB_HOST: 'ywp_db'
+      DB_PORT: '5432'
+      DB_PASS: ''
       ASSETS_PATH: '/assets/'
 
   frontend:
