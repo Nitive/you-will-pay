@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 services:
   db:
@@ -6,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: ./docker/ywp_db/Dockerfile
+    volumes:
+      - db_volume:/var/lib/postgresql/data
 
   test_db:
     container_name: ywp_test_db
@@ -47,3 +49,6 @@ services:
       dockerfile: ./docker/ywp_nginx/Dockerfile
     ports:
       - '80:80'
+
+volumes:
+  db_volume:
