@@ -4,6 +4,7 @@ WORKDIR /opt/ywp_frontend
 RUN npm install -g bower pulp
 
 COPY ./package.json /opt/ywp_frontend/package.json
+COPY ./package-lock.json /opt/ywp_frontend/package-lock.json
 RUN npm install
 
 COPY ./bower.json /opt/ywp_frontend/bower.json
