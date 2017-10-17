@@ -1,6 +1,6 @@
 module Components.TransactionsList where
 
-import CSS (Color, StyleM, backgroundColor, borderRadius, color, display, fontSize, fromHexString, height, inlineBlock, marginBottom, marginRight, paddingLeft, pct, px, width)
+import CSS (Color, StyleM, absolute, backgroundColor, borderRadius, color, display, fontSize, fromHexString, height, inlineBlock, left, marginBottom, marginRight, paddingLeft, pct, position, px, relative, top, width)
 import CSS.Common (none)
 import CSS.ListStyle.Type (listStyleType)
 import Data.Int (toNumber)
@@ -15,7 +15,7 @@ import Utils.Formatters (formatCurrency)
 listStyle :: StyleM Unit
 listStyle = do
   marginBottom $ px (-10.0)
-  paddingLeft $ px 0.0
+  paddingLeft $ px 16.0
   listStyleType none
   fontSize $ px 13.0
   color warmGrey
@@ -23,9 +23,13 @@ listStyle = do
 itemStyle :: StyleM Unit
 itemStyle = do
   marginBottom $ px 10.0
+  position relative
 
 circleStyle :: Color -> StyleM Unit
 circleStyle userColor = do
+  position absolute
+  left $ px $ -16.0
+  top $ px 4.0
   display inlineBlock
   height $ px 10.0
   width $ px 10.0
