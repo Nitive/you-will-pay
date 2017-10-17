@@ -17,30 +17,39 @@ addTransactionFormTemplate state =
           HH.text $ "transaction #" <> show report.transactionId <> " " <> "created"
         Nothing ->
           HH.form [ HE.onSubmit (HE.input SubmitForm) ]
-            [ HH.label_
-              [ HH.text "User ID: "
-              , HH.input
-                [ HP.value state.payUserId
-                , HE.onValueInput (HE.input SetPayUserId)
-                , HP.type_ HP.InputNumber
-                ]
-              ]
-            , HH.label_
-              [ HH.text "Price: "
-              , HH.input
-                [ HP.value state.price
-                , HE.onValueInput (HE.input SetPrice)
-                , HP.type_ HP.InputNumber
-                ]
-              ]
-            , HH.label_
-              [ HH.text "Description: "
-              , HH.input
-                [ HP.value state.description
-                , HE.onValueInput (HE.input SetDescription)
-                ]
-              ]
-            , HH.button_ [ HH.text "Submit" ]
+            [ userSelect state.payUserId
+            , price state.price
+            , description state.description
+            , submitButton
             ]
     Pending ->
       HH.text "Pending..."
+
+  where
+    userSelect payUserId = HH.label_
+      [ HH.text "User ID: "
+      , HH.input
+        [ HP.value payUserId
+        , HE.onValueInput (HE.input SetPayUserId)
+        , HP.type_ HP.InputNumber
+        ]
+      ]
+
+    price value = HH.label_
+      [ HH.text "Price: "
+      , HH.input
+        [ HP.value value
+        , HE.onValueInput (HE.input SetPrice)
+        , HP.type_ HP.InputNumber
+        ]
+      ]
+
+    description value = HH.label_
+      [ HH.text "Description: "
+      , HH.input
+        [ HP.value value
+        , HE.onValueInput (HE.input SetDescription)
+        ]
+      ]
+
+    submitButton = HH.button_ [ HH.text "Submit" ]
