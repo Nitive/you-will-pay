@@ -16,7 +16,7 @@ mainTemplate assetsPath =
         meta ! charset "utf-8"
         meta ! name "viewport" ! content "width=device-width, initial-scale=1.0"
         meta ! httpEquiv "X-UA-Compatible" ! content "ie=edge"
-        link ! href "https://fonts.googleapis.com/css?family=Lato:400,700&amp;subset=latin-ext" ! rel "stylesheet"
+        script ! src "//cdn.cian.site/frontend/fonts/l/fonts.min.js" ! H.dataAttribute "fonts-public-path" "//cdn.cian.site/frontend/fonts/" $ ""
         H.title "App"
       body $
         script ! src jsEntry $ ""
