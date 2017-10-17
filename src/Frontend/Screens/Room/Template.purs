@@ -61,18 +61,16 @@ roomTemplate state =
     Loaded ->
       case state.summary of
         Just summary ->
-          HH.div [ style screenStyle ] [
-            HH.header [ style headerStyle ] [ HH.text "Matrix" ]
-          , HH.div [ style mainStyle ] [
-              HH.p [ style userPaysStyle ] [
-                HH.text $ summary.payUser.name <> " pays"
-              ],
-              HH.p [ style relativePriceStyle ] [
-                HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less"
-              ]
-            , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
-            , HH.ul_ $ renderTransaction <$> summary.history
-          ]
+          HH.div [ style screenStyle ]
+            [ HH.header [ style headerStyle ] [ HH.text "Matrix" ]
+            , HH.div [ style mainStyle ]
+              [ HH.p [ style userPaysStyle ]
+                [ HH.text $ summary.payUser.name <> " pays" ],
+                HH.p [ style relativePriceStyle ]
+                  [ HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less" ]
+              , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
+              , HH.ul_ $ renderTransaction <$> summary.history
+            ]
         ]
 
         Nothing ->
