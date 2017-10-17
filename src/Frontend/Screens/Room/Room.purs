@@ -11,7 +11,7 @@ import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
 import Prelude (type (~>), Unit, Void, bind, const, discard, pure, ($), (<$>), (<*>), (==))
 import Screens.Room.Model (Query(GetSummary), State, Status(..), Summary)
-import Screens.Room.Template (roomTemplate)
+import Screens.Room.Template (Slot, roomTemplate)
 import Types (ComponentEffects)
 
 responseToSummary :: AffjaxResponse GetSummaryResponse -> Maybe Summary
@@ -57,10 +57,9 @@ room =
     , summary: Nothing
     }
 
-  -- render :: State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
   render = roomTemplate
 
-  eval :: Query ~> H.ParentDSL State Query ATF.Query _ Void (ComponentEffects eff)
+  eval :: Query ~> H.ParentDSL State Query ATF.Query Slot Void (ComponentEffects eff)
   eval (GetSummary next) = do
     H.modify (_ { status = Pending })
     res <- H.liftAff $ getSummary 1

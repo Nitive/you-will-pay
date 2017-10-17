@@ -11,6 +11,7 @@ import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
 import Prelude (class Eq, class Ord, Unit, const, discard, show, unit, ($), (<$>), (<>))
 import Screens.Room.Model (Query, State, Status(..))
+import Types (ComponentEffects)
 
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
@@ -54,7 +55,7 @@ errorStyle :: StyleM Unit
 errorStyle = do
   color red
 
-roomTemplate :: State -> H.ParentHTML Query ATF.Query Slot _
+roomTemplate :: forall eff. State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
 roomTemplate state =
   case state.status of
     Loaded ->
