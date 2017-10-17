@@ -90,6 +90,7 @@ addTransactionForm =
                   , HH.input
                     [ HP.value state.payUserId
                     , HE.onValueInput (HE.input SetPayUserId)
+                    , HP.type_ HP.InputNumber
                     ]
                   ]
                 , HH.label_
@@ -97,6 +98,7 @@ addTransactionForm =
                   , HH.input
                     [ HP.value state.price
                     , HE.onValueInput (HE.input SetPrice)
+                    , HP.type_ HP.InputNumber
                     ]
                   ]
                 , HH.label_
