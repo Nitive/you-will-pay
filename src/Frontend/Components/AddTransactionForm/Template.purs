@@ -1,12 +1,34 @@
 module Components.AddTransactionForm.Template where
 
 import Components.AddTransactionForm.Model
+
+import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, boxSizing, color, display, fontSize, marginBottom, marginTop, px, solid, width)
+import CSS.Common (none)
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.CSS (style)
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
-import Prelude (show, ($), (<>))
+import Prelude (Unit, discard, show, ($), (<>))
+import UI.CSS (borderWidth, outline, paddingX)
+import UI.Colors (paleGrey, transparent, white)
+
+
+priceInputStyle :: StyleM Unit
+priceInputStyle = do
+  display block
+  width $ px 260.0
+  paddingX $ px 15.0
+  marginTop $ px 25.0
+  marginBottom $ px 20.0
+  fontSize $ px 36.0
+  color white
+  backgroundColor transparent
+  borderWidth $ px 0.0
+  borderBottom solid (px 1.0) paleGrey
+  boxSizing borderBox
+  outline none
 
 addTransactionFormTemplate :: State -> H.ComponentHTML Query
 addTransactionFormTemplate state =
@@ -35,13 +57,12 @@ addTransactionFormTemplate state =
         ]
       ]
 
-    price value = HH.label_
-      [ HH.text "Price: "
-      , HH.input
-        [ HP.value value
-        , HE.onValueInput (HE.input SetPrice)
-        , HP.type_ HP.InputNumber
-        ]
+    price value = HH.input
+      [ HP.value value
+      , HE.onValueInput (HE.input SetPrice)
+      , HP.type_ HP.InputNumber
+      , HP.placeholder "Price"
+      , style priceInputStyle
       ]
 
     description value = HH.label_

@@ -33,8 +33,8 @@ headerStyle = do
 mainStyle :: StyleM Unit
 mainStyle = do
   paddingTop $ px 20.0
-  paddingRight $ px 30.0
-  paddingLeft $ px 30.0
+  paddingRight $ px 35.0
+  paddingLeft $ px 35.0
 
 userPaysStyle :: StyleM Unit
 userPaysStyle = do
