@@ -1,0 +1,22 @@
+module Components.Layout where
+
+import CSS (StyleM, backgroundColor, body, color, margin, px, (?))
+import Halogen.HTML (HTML, div_)
+import Halogen.HTML.CSS (stylesheet)
+import Prelude (Unit, discard)
+import UI.Colors (darkGray, white)
+
+
+bodyStyle :: StyleM Unit
+bodyStyle =
+  body ? do
+    margin (px 0.0) (px 0.0) (px 0.0) (px 0.0)
+    backgroundColor darkGray
+    color white
+
+layout :: forall a b. HTML a b -> HTML a b
+layout content =
+  div_
+    [ stylesheet bodyStyle
+    , content
+    ]

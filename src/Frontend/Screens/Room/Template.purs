@@ -1,10 +1,11 @@
 module Screens.Room.Template where
 
-import CSS (StyleM, backgroundColor, color, fontSize, margin, marginBottom, marginTop, maxWidth, paddingLeft, paddingRight, paddingTop, px, rgb, white)
+import CSS (StyleM, backgroundColor, color, fontSize, fromInt, margin, marginBottom, marginTop, maxWidth, paddingLeft, paddingRight, paddingTop, px)
 import CSS.Common (auto)
 import CSS.TextAlign (textAlign, center)
 import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
+import Components.Layout (layout)
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
@@ -21,14 +22,12 @@ screenStyle :: StyleM Unit
 screenStyle = do
   maxWidth $ px 500.0
   margin (px 0.0) auto (px 0.0) auto
-  color white
-  backgroundColor $ rgb 0x37 0x37 0x37
 
 headerStyle :: StyleM Unit
 headerStyle = do
   paddingRight $ px 5.0
   paddingLeft $ px 5.0
-  backgroundColor $ rgb 0x49 0x90 0xE2
+  backgroundColor $ fromInt 0x4990E2
   fontSize $ px 10.0
 
 mainStyle :: StyleM Unit
@@ -47,7 +46,7 @@ userPaysStyle = do
 relativePriceStyle :: StyleM Unit
 relativePriceStyle = do
   marginBottom $ px 40.0
-  color $ rgb 0x9F 0x9F 0x9F
+  color $ fromInt 0x9F9F9F
   textAlign center
   fontSize $ px 13.0
 
@@ -56,7 +55,7 @@ errorStyle = do
   color red
 
 roomTemplate :: forall eff. State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
-roomTemplate state =
+roomTemplate state = layout
   case state.status of
     Loaded ->
       case state.summary of
