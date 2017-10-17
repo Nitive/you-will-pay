@@ -1,8 +1,13 @@
-module Components.AddTransactionForm where
+module Components.AddTransactionForm
+  ( module Components.AddTransactionForm
+  , module Components.AddTransactionForm.Model
+  ) where
 
 import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse(..), addTransaction)
+import Components.AddTransactionForm.Model
+import Components.AddTransactionForm.Template (addTransactionFormTemplate)
 import Control.Monad.Eff.Now (now)
-import DOM.Event.Event (Event, preventDefault)
+import DOM.Event.Event (preventDefault)
 import Data.DateTime (DateTime)
 import Data.DateTime.Instant (toDateTime)
 import Data.Either (either)
@@ -12,33 +17,11 @@ import Data.Maybe (Maybe(..))
 import Halogen (liftEff)
 import Halogen as H
 import Halogen.HTML as HH
-import Halogen.HTML.Events as HE
-import Halogen.HTML.Properties as HP
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
-import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<*>), (<>))
+import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, ($), (<$>), (<*>))
 import Types (ComponentEffects)
 
-
-type Report =
-  { transactionId :: Int
-  }
-
-data Status = Pending | Loaded
-
-type State =
-  { status :: Status
-  , report :: Maybe Report
-  , price :: String
-  , description :: String
-  , payUserId :: String
-  }
-
-data Query a
-  = SubmitForm Event a
-  | SetPrice String a
-  | SetDescription String a
-  | SetPayUserId String a
 
 stateToRequest :: DateTime -> State -> Maybe AddTransactionRequest
 stateToRequest created state = createRequest <$> price <*> payUserId
@@ -76,42 +59,7 @@ addTransactionForm =
       , payUserId: ""
       }
 
-    render :: State -> H.ComponentHTML Query
-    render state =
-      case state.status of
-        Loaded ->
-          case state.report of
-            Just report ->
-              HH.text $ "transaction #" <> show report.transactionId <> " " <> "created"
-            Nothing ->
-              HH.form [ HE.onSubmit (HE.input SubmitForm) ]
-                [ HH.label_
-                  [ HH.text "User ID: "
-                  , HH.input
-                    [ HP.value state.payUserId
-                    , HE.onValueInput (HE.input SetPayUserId)
-                    , HP.type_ HP.InputNumber
-                    ]
-                  ]
-                , HH.label_
-                  [ HH.text "Price: "
-                  , HH.input
-                    [ HP.value state.price
-                    , HE.onValueInput (HE.input SetPrice)
-                    , HP.type_ HP.InputNumber
-                    ]
-                  ]
-                , HH.label_
-                  [ HH.text "Description: "
-                  , HH.input
-                    [ HP.value state.description
-                    , HE.onValueInput (HE.input SetDescription)
-                    ]
-                  ]
-                , HH.button_ [ HH.text "Submit" ]
-                ]
-        Pending ->
-          HH.text "Pending..."
+    render = addTransactionFormTemplate
 
     eval :: Query ~> H.ComponentDSL State Query Void (ComponentEffects eff)
     eval (SubmitForm event next) = do

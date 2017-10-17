@@ -1,4 +1,7 @@
-module Screens.Room where
+module Screens.Room
+  ( module Screens.Room
+  , module Screens.Room.Model
+  ) where
 
 import Api.GetSummary (GetSummaryResponse(..), getSummary)
 import Components.AddTransactionForm as ATF
