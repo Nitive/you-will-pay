@@ -6,13 +6,15 @@ import CSS.TextAlign (textAlign, center)
 import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
 import Components.Layout (layout)
+import Components.TransactionsList (transactionsList)
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
-import Prelude (class Eq, class Ord, Unit, const, discard, show, unit, ($), (<$>), (<>))
+import Prelude (class Eq, class Ord, Unit, const, discard, show, unit, ($), (<>))
 import Screens.Room.Model (Query, State, Status(..))
 import Types (ComponentEffects)
+import UI.Colors (warmGrey)
 
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
@@ -46,7 +48,7 @@ userPaysStyle = do
 relativePriceStyle :: StyleM Unit
 relativePriceStyle = do
   marginBottom $ px 40.0
-  color $ fromInt 0x9F9F9F
+  color warmGrey
   textAlign center
   fontSize $ px 13.0
 
@@ -68,7 +70,7 @@ roomTemplate state = layout
                 HH.p [ style relativePriceStyle ]
                   [ HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less" ]
               , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
-              , HH.ul_ $ renderTransaction <$> summary.history
+              , transactionsList summary.history
             ]
         ]
 
@@ -77,8 +79,3 @@ roomTemplate state = layout
 
     Pending ->
       HH.text "Loading..."
-
-  where
-    renderTransaction tr = HH.li_
-      [ HH.text $ tr.user.name <> ": " <> (show tr.price) <> " (" <> tr.description <> ")"
-      ]
