@@ -53,7 +53,6 @@ addTransactionFormTemplate state =
             [ userSelect state.payUserId
             , price state.price
             , description state.description
-            , submitButton
             ]
     Pending ->
       HH.text "Pending..."
@@ -82,5 +81,3 @@ addTransactionFormTemplate state =
       , HP.placeholder "A few words about it"
       , style descriptionInputStyle
       ]
-
-    submitButton = HH.button_ [ HH.text "Submit" ]
