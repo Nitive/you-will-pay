@@ -1,9 +1,8 @@
 module Components.Layout where
 
 import CSS (StyleM, backgroundColor, body, color, margin, px, (?))
-import Halogen.HTML (HTML, div_, link)
+import Halogen.HTML (HTML, div_)
 import Halogen.HTML.CSS (stylesheet)
-import Halogen.HTML.Properties (href, rel)
 import Prelude (Unit, discard)
 import UI.Colors (darkGray, white)
 import UI.Fonts (fontFamilyLato, webkitFontSmoothing)
