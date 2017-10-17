@@ -14,7 +14,7 @@ import Halogen.HTML.CSS (style)
 import Prelude (class Eq, class Ord, Unit, const, discard, show, unit, ($), (<>))
 import Screens.Room.Model (Query, State, Status(..))
 import Types (ComponentEffects)
-import UI.Colors (warmGrey)
+import UI.Colors (warmGray)
 
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
@@ -48,7 +48,7 @@ userPaysStyle = do
 relativePriceStyle :: StyleM Unit
 relativePriceStyle = do
   marginBottom $ px 40.0
-  color warmGrey
+  color warmGray
   textAlign center
   fontSize $ px 13.0
 

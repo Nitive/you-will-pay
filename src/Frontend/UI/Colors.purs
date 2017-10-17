@@ -11,8 +11,8 @@ paleGrey = fromInt 0xe4e6ea
 dodgerBlue :: Color
 dodgerBlue = fromInt 0x4e9dff
 
-warmGrey :: Color
-warmGrey = fromInt 0x9F9F9F
+warmGray :: Color
+warmGray = fromInt 0x9F9F9F
 
 white :: Color
 white = fromInt 0xfdfdfd
