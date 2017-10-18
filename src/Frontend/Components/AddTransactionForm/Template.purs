@@ -16,6 +16,12 @@ import UI.CSS (borderWidth, outline, paddingX)
 import UI.Colors (paleGrey, transparent, white)
 
 
+selectStyle :: StyleM Unit
+selectStyle = do
+  fontSize $ px 24.0
+  color white
+  backgroundColor transparent
+
 inputStyle :: StyleM Unit
 inputStyle = do
   display block
@@ -64,7 +70,7 @@ addTransactionFormTemplate users state =
       HH.text "Pending..."
 
   where
-    userSelect payUserId = HH.select [ HE.onValueChange (HE.input SetPayUserId) ] options
+    userSelect payUserId = HH.select [ HE.onValueChange (HE.input SetPayUserId), style selectStyle ] options
       where
         renderUserSelectOption user = HH.option
           [ HP.value $ show user.id, HP.selected $ show user.id == payUserId ]
