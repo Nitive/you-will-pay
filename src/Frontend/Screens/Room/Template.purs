@@ -69,7 +69,7 @@ roomTemplate state = layout
                 [ HH.text $ summary.payUser.name <> " pays" ],
                 HH.p [ style relativePriceStyle ]
                   [ HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less" ]
-              , HH.slot ATFSlot ATF.addTransactionForm unit (const Nothing)
+              , HH.slot ATFSlot (ATF.addTransactionForm summary.payUser.id summary.users) unit (const Nothing)
               , transactionsList summary.history
             ]
         ]

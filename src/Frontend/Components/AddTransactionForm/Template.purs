@@ -10,7 +10,8 @@ import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
-import Prelude (Unit, discard, show, ($), (<>))
+import Prelude (Unit, discard, show, ($), (<$>), (<>), (==))
+import Screens.Room.Model (User)
 import UI.CSS (borderWidth, outline, paddingX)
 import UI.Colors (paleGrey, transparent, white)
 
@@ -45,8 +46,8 @@ submitButtonStyle :: StyleM Unit
 submitButtonStyle = do
   display displayNone
 
-addTransactionFormTemplate :: State -> H.ComponentHTML Query
-addTransactionFormTemplate state =
+addTransactionFormTemplate :: Array User -> State -> H.ComponentHTML Query
+addTransactionFormTemplate users state =
   case state.status of
     Loaded ->
       case state.report of
@@ -63,14 +64,12 @@ addTransactionFormTemplate state =
       HH.text "Pending..."
 
   where
-    userSelect payUserId = HH.label_
-      [ HH.text "User ID: "
-      , HH.input
-        [ HP.value payUserId
-        , HE.onValueInput (HE.input SetPayUserId)
-        , HP.type_ HP.InputNumber
-        ]
-      ]
+    userSelect payUserId = HH.select [ HE.onValueChange (HE.input SetPayUserId) ] options
+      where
+        renderUserSelectOption user = HH.option
+          [ HP.value $ show user.id, HP.selected $ show user.id == payUserId ]
+          [ HH.text user.name ]
+        options = renderUserSelectOption <$> users
 
     price value = HH.input
       [ HP.value value

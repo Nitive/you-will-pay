@@ -3,8 +3,9 @@ module Components.AddTransactionForm
   , module Components.AddTransactionForm.Model
   ) where
 
-import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse(..), addTransaction)
 import Components.AddTransactionForm.Model
+
+import Api.AddTransaction (AddTransactionRequest(AddTransactionRequest), AddTransactionResponse(..), addTransaction)
 import Components.AddTransactionForm.Template (addTransactionFormTemplate)
 import Control.Monad.Eff.Now (now)
 import DOM.Event.Event (preventDefault)
@@ -19,7 +20,8 @@ import Halogen as H
 import Halogen.HTML as HH
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
-import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, ($), (<$>), (<*>))
+import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<*>))
+import Screens.Room.Model (User)
 import Types (ComponentEffects)
 
 
@@ -41,8 +43,8 @@ responseToReport :: AffjaxResponse AddTransactionResponse -> Maybe Report
 responseToReport { status: StatusCode 200, response: (AddTransactionResponse result) } = Just result
 responseToReport _ = Nothing
 
-addTransactionForm :: forall eff. H.Component HH.HTML Query Unit Void (ComponentEffects eff)
-addTransactionForm =
+addTransactionForm :: forall eff. Int -> Array User -> H.Component HH.HTML Query Unit Void (ComponentEffects eff)
+addTransactionForm payUserId users =
   H.component
     { initialState: const initialState
     , render
@@ -56,10 +58,10 @@ addTransactionForm =
       , report: Nothing
       , price: ""
       , description: ""
-      , payUserId: ""
+      , payUserId: show payUserId
       }
 
-    render = addTransactionFormTemplate
+    render = addTransactionFormTemplate users
 
     eval :: Query ~> H.ComponentDSL State Query Void (ComponentEffects eff)
     eval (SubmitForm event next) = do
