@@ -2,7 +2,7 @@ module Components.AddTransactionForm.Template where
 
 import Components.AddTransactionForm.Model
 
-import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, boxSizing, color, display, fontSize, marginBottom, marginTop, paddingBottom, px, solid, width)
+import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, boxSizing, color, display, displayNone, fontSize, marginBottom, marginTop, paddingBottom, px, solid, width)
 import CSS.Common (none)
 import Data.Maybe (Maybe(..))
 import Halogen as H
@@ -41,6 +41,10 @@ descriptionInputStyle = do
   paddingBottom $ px 3.0
   fontSize $ px 18.0
 
+submitButtonStyle :: StyleM Unit
+submitButtonStyle = do
+  display displayNone
+
 addTransactionFormTemplate :: State -> H.ComponentHTML Query
 addTransactionFormTemplate state =
   case state.status of
@@ -53,6 +57,7 @@ addTransactionFormTemplate state =
             [ userSelect state.payUserId
             , price state.price
             , description state.description
+            , submitButton
             ]
     Pending ->
       HH.text "Pending..."
@@ -81,3 +86,5 @@ addTransactionFormTemplate state =
       , HP.placeholder "A few words about it"
       , style descriptionInputStyle
       ]
+
+    submitButton = HH.button [ style submitButtonStyle ] []

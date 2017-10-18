@@ -2,7 +2,7 @@ module UI.CSS where
 
 import CSS (class Val, CSS, Size, StyleM, fromString, key, paddingLeft, paddingRight)
 import CSS.Common (class None)
-import Prelude (Unit, discard, ($))
+import Prelude (Unit, discard, show, ($), (<<<))
 
 
 borderWidth :: forall a. Size a -> CSS
@@ -22,3 +22,6 @@ paddingX :: forall a. Size a -> StyleM Unit
 paddingX x = do
   paddingLeft x
   paddingRight x
+
+opacity :: Number -> CSS
+opacity = key (fromString "opacity") <<< show
