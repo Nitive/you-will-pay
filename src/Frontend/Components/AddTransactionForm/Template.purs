@@ -2,7 +2,7 @@ module Components.AddTransactionForm.Template where
 
 import Components.AddTransactionForm.Model
 
-import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, boxSizing, color, display, displayNone, fontSize, marginBottom, marginTop, paddingBottom, px, solid, width)
+import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, borderRadius, boxSizing, color, display, fontSize, height, marginBottom, marginTop, paddingBottom, px, solid, width)
 import CSS.Common (none)
 import Data.Maybe (Maybe(..))
 import Halogen as H
@@ -31,6 +31,7 @@ inputStyle = do
   backgroundColor transparent
   borderWidth $ px 0.0
   borderBottom solid (px 1.0) paleGrey
+  borderRadius (px 0.0) (px 0.0) (px 0.0) (px 0.0)
   boxSizing borderBox
   outline none
 
@@ -50,7 +51,8 @@ descriptionInputStyle = do
 
 submitButtonStyle :: StyleM Unit
 submitButtonStyle = do
-  display displayNone
+  width $ px 0.0
+  height $ px 0.0
 
 addTransactionFormTemplate :: Array User -> State -> H.ComponentHTML Query
 addTransactionFormTemplate users state =
@@ -60,7 +62,7 @@ addTransactionFormTemplate users state =
         Just report ->
           HH.text $ "transaction #" <> show report.transactionId <> " " <> "created"
         Nothing ->
-          HH.form [ HE.onSubmit (HE.input SubmitForm) ]
+          HH.form [ HP.action "", HE.onSubmit (HE.input SubmitForm) ]
             [ userSelect state.payUserId
             , price state.price
             , description state.description
@@ -92,4 +94,4 @@ addTransactionFormTemplate users state =
       , style descriptionInputStyle
       ]
 
-    submitButton = HH.button [ style submitButtonStyle ] []
+    submitButton = HH.input [ HP.type_ HP.InputSubmit, HP.value "", style submitButtonStyle ]
