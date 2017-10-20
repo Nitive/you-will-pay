@@ -19,8 +19,9 @@ ENV PATH /opt/purescript:$PATH
 
 COPY . /opt/ywp_frontend
 
-RUN mkdir -p /opt/public/assets \
-    && pulp browserify > /opt/public/assets/app.js
+RUN mkdir -p /opt/public/assets
+RUN pulp browserify --optimise > /opt/public/assets/app.js
+COPY resources /opt/public/assets/
 
 WORKDIR /opt/public
 
