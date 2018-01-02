@@ -2,7 +2,7 @@ module Components.AddTransactionForm.Template where
 
 import Components.AddTransactionForm.Model
 
-import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, borderRadius, boxSizing, color, display, fontSize, height, marginBottom, marginTop, paddingBottom, px, solid, width)
+import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, borderRadius, boxSizing, color, display, fontSize, marginBottom, marginTop, paddingBottom, px, solid, width)
 import CSS.Common (none)
 import Data.Maybe (Maybe(..))
 import Halogen as H
@@ -13,7 +13,7 @@ import Halogen.HTML.Properties (StepValue(..))
 import Halogen.HTML.Properties as HP
 import Prelude (Unit, discard, show, ($), (<$>), (<>), (==))
 import Screens.Room.Model (User)
-import UI.CSS (borderWidth, outline, paddingX)
+import UI.CSS (borderWidth, outline, paddingX, visuallyHidden)
 import UI.Colors (paleGrey, transparent, white)
 
 
@@ -51,9 +51,7 @@ descriptionInputStyle = do
   fontSize $ px 18.0
 
 submitButtonStyle :: StyleM Unit
-submitButtonStyle = do
-  width $ px 0.0
-  height $ px 0.0
+submitButtonStyle = visuallyHidden
 
 addTransactionFormTemplate :: Array User -> State -> H.ComponentHTML Query
 addTransactionFormTemplate users state =
@@ -98,4 +96,4 @@ addTransactionFormTemplate users state =
       , style descriptionInputStyle
       ]
 
-    submitButton = HH.input [ HP.type_ HP.InputSubmit, HP.value "", style submitButtonStyle ]
+    submitButton = HH.input [ HP.type_ HP.InputSubmit, HP.value "Save", style submitButtonStyle ]
