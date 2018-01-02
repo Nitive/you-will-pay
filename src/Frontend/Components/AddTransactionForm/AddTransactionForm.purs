@@ -80,7 +80,7 @@ addTransactionForm payUserId users =
         Just req -> do
           H.modify (_ { status = Pending })
           res <- H.liftAff $ addTransaction req
-          H.modify (_ { status = Loaded, report = responseToReport res })
+          H.modify (_ { status = Loaded, report = responseToReport res, price = "", description = "" })
         Nothing -> do
           H.modify (_ { status = Loaded })
       pure next

@@ -4,8 +4,10 @@ import Components.AddTransactionForm.Model
 
 import CSS (StyleM, backgroundColor, block, borderBottom, borderBox, borderRadius, boxSizing, color, display, fontSize, marginBottom, marginTop, paddingBottom, px, solid, width)
 import CSS.Common (none)
+import Data.Array (catMaybes)
 import Data.Maybe (Maybe(..))
 import Halogen as H
+import Halogen.HTML (HTML)
 import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
 import Halogen.HTML.Events as HE
@@ -53,22 +55,26 @@ descriptionInputStyle = do
 submitButtonStyle :: StyleM Unit
 submitButtonStyle = visuallyHidden
 
+getReport :: forall a b. Report -> HTML a b
+getReport report = HH.text $ "transaction #" <> show report.transactionId <> " " <> "created"
+
+getSpinner :: forall a b. Status -> Maybe (HTML a b)
+getSpinner Pending = Just $ HH.text "Pending..."
+getSpinner Loaded = Nothing
+
 addTransactionFormTemplate :: Array User -> State -> H.ComponentHTML Query
 addTransactionFormTemplate users state =
-  case state.status of
-    Loaded ->
-      case state.report of
-        Just report ->
-          HH.text $ "transaction #" <> show report.transactionId <> " " <> "created"
-        Nothing ->
-          HH.form [ HP.action "", HE.onSubmit (HE.input SubmitForm) ]
-            [ userSelect state.payUserId
-            , price state.price
-            , description state.description
-            , submitButton
-            ]
-    Pending ->
-      HH.text "Pending..."
+  HH.div_ $ catMaybes
+    [ getReport <$> state.report
+    , getSpinner state.status
+    , Just $
+        HH.form [ HP.action "", HE.onSubmit (HE.input SubmitForm) ]
+          [ userSelect state.payUserId
+          , price state.price
+          , description state.description
+          , submitButton
+          ]
+    ]
 
   where
     userSelect payUserId = HH.select [ HE.onValueChange (HE.input SetPayUserId), style selectStyle ] options
