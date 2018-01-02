@@ -9,6 +9,7 @@ import Halogen as H
 import Halogen.HTML as HH
 import Halogen.HTML.CSS (style)
 import Halogen.HTML.Events as HE
+import Halogen.HTML.Properties (StepValue(..))
 import Halogen.HTML.Properties as HP
 import Prelude (Unit, discard, show, ($), (<$>), (<>), (==))
 import Screens.Room.Model (User)
@@ -83,6 +84,8 @@ addTransactionFormTemplate users state =
       [ HP.value value
       , HE.onValueInput (HE.input SetPrice)
       , HP.type_ HP.InputNumber
+      , HP.step (Step 0.01)
+      , HP.min 0.0
       , HP.placeholder "Price"
       , style priceInputStyle
       ]

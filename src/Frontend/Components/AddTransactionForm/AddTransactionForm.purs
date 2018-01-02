@@ -13,7 +13,7 @@ import Data.DateTime (DateTime)
 import Data.DateTime.Instant (toDateTime)
 import Data.Either (either)
 import Data.Formatter.DateTime (formatDateTime)
-import Data.Int (fromString)
+import Data.Int (floor, fromString)
 import Data.Maybe (Maybe(..))
 import Halogen (liftEff)
 import Halogen as H
@@ -23,6 +23,7 @@ import Network.HTTP.StatusCode (StatusCode(..))
 import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<*>))
 import Screens.Room.Model (User)
 import Types (ComponentEffects)
+import Utils.Parsers (parseNumber)
 
 
 stateToRequest :: DateTime -> State -> Maybe AddTransactionRequest
@@ -36,7 +37,7 @@ stateToRequest created state = createRequest <$> price <*> payUserId
           , description: state.description
           , roomId: 1
           }
-      price = fromString state.price
+      price = floor <$> parseNumber state.price
       payUserId = fromString state.payUserId
 
 responseToReport :: AffjaxResponse AddTransactionResponse -> Maybe Report
