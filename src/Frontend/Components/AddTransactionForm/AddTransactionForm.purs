@@ -14,8 +14,7 @@ import Data.DateTime.Instant (toDateTime)
 import Data.Either (either)
 import Data.Formatter.DateTime (formatDateTime)
 import Data.Int (floor, fromString)
-import Data.Maybe (Maybe(..))
-import Halogen (liftEff)
+import Data.Maybe (Maybe(..), fromMaybe)
 import Halogen as H
 import Halogen.HTML as HH
 import Network.HTTP.Affjax (AffjaxResponse)
@@ -23,8 +22,12 @@ import Network.HTTP.StatusCode (StatusCode(..))
 import Prelude (type (~>), Unit, Void, bind, const, discard, id, pure, show, ($), (<$>), (<*>))
 import Screens.Room.Model (User)
 import Types (ComponentEffects)
+import Utils.LocalStorage (LocalStorageContent(..), getLocalStorageContent, updateLocalStorageContent)
 import Utils.Parsers (parseNumber)
 
+
+updatePayUserIdInLocalStorage :: Maybe Int -> LocalStorageContent -> LocalStorageContent
+updatePayUserIdInLocalStorage payUserId (LocalStorageContent content) = LocalStorageContent content { userId = payUserId }
 
 stateToRequest :: DateTime -> State -> Maybe AddTransactionRequest
 stateToRequest created state = createRequest <$> price <*> payUserId
@@ -46,10 +49,12 @@ responseToReport _ = Nothing
 
 addTransactionForm :: forall eff. Int -> Array User -> H.Component HH.HTML Query Unit Void (ComponentEffects eff)
 addTransactionForm payUserId users =
-  H.component
+  H.lifecycleComponent
     { initialState: const initialState
     , render
     , eval
+    , initializer: Just $ H.action InitializeForm
+    , finalizer: Nothing
     , receiver: const Nothing
     }
   where
@@ -66,9 +71,9 @@ addTransactionForm payUserId users =
 
     eval :: Query ~> H.ComponentDSL State Query Void (ComponentEffects eff)
     eval (SubmitForm event next) = do
-      liftEff $ preventDefault event
+      H.liftEff $ preventDefault event
 
-      created <- liftEff $ toDateTime <$> now
+      created <- H.liftEff $ toDateTime <$> now
       state <- H.get
       let request = stateToRequest created state
       case request of
@@ -88,6 +93,12 @@ addTransactionForm payUserId users =
       H.modify (_ { description = description })
       pure next
 
-    eval (SetPayUserId payUserId next) = do
-      H.modify (_ { payUserId = payUserId })
+    eval (SetPayUserId userId next) = do
+      H.modify (_ { payUserId = userId })
+      H.liftEff $ updateLocalStorageContent (updatePayUserIdInLocalStorage $ fromString userId)
+      pure next
+
+    eval (InitializeForm next) = do
+      (LocalStorageContent content) <- H.liftEff getLocalStorageContent
+      H.modify (\st -> st { payUserId = fromMaybe st.payUserId (show <$> content.userId) })
       pure next

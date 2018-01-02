@@ -22,3 +22,4 @@ data Query a
   | SetPrice String a
   | SetDescription String a
   | SetPayUserId String a
+  | InitializeForm a
