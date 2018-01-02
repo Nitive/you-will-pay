@@ -94,6 +94,7 @@ addTransactionFormTemplate users state =
       [ HP.value value
       , HE.onValueInput (HE.input SetDescription)
       , HP.placeholder "A few words about it"
+      , HP.required true
       , style descriptionInputStyle
       ]
 
