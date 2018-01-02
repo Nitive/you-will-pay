@@ -5,6 +5,7 @@ module Screens.Room
 
 import Api.GetSummary (GetSummaryResponse(..), getSummary)
 import Components.AddTransactionForm as ATF
+import Data.Array ((:))
 import Data.Foldable (find)
 import Data.Maybe (Maybe(..))
 import Data.Traversable (sequence)
@@ -13,8 +14,8 @@ import Halogen.HTML as HH
 import Network.HTTP.Affjax (AffjaxResponse)
 import Network.HTTP.StatusCode (StatusCode(..))
 import Prelude (type (~>), Unit, Void, bind, const, discard, pure, ($), (<$>), (<*>), (==))
-import Screens.Room.Model (Query(GetSummary), State, Status(..), Summary)
-import Screens.Room.Template (Slot, roomTemplate)
+import Screens.Room.Model (State, Status(..), Summary, Transaction)
+import Screens.Room.Template (Query(GetSummary, HandleForm), Slot, roomTemplate)
 import Types (ComponentEffects)
 
 responseToSummary :: AffjaxResponse GetSummaryResponse -> Maybe Summary
@@ -42,6 +43,11 @@ responseToSummary { status: StatusCode 200, response: (GetSummaryResponse result
     summary = parseSummary <$> payUser <*> transactions
 responseToSummary _ = Nothing
 
+addTransactionToHistory :: Transaction -> State -> State
+addTransactionToHistory transaction state = case state.summary of
+  Just summary -> state { summary = Just summary { history = transaction : summary.history } }
+  _ -> state
+
 room :: forall eff. H.Component HH.HTML Query Unit Void (ComponentEffects eff)
 room =
   H.lifecycleParentComponent
@@ -67,4 +73,8 @@ room =
     H.modify (_ { status = Pending })
     res <- H.liftAff $ getSummary 1
     H.modify (_ { status = Loaded, summary = responseToSummary res })
+    pure next
+
+  eval (HandleForm (ATF.AddTransaction transaction) next) = do
+    H.modify (addTransactionToHistory transaction)
     pure next

@@ -10,15 +10,20 @@ import Components.TransactionsList (transactionsList)
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
 import Halogen.HTML.CSS (style)
-import Prelude (class Eq, class Ord, Unit, const, discard, show, unit, ($), (<>))
-import Screens.Room.Model (Query, State, Status(..))
+import Prelude (class Eq, class Ord, Unit, discard, show, unit, ($), (<>))
+import Screens.Room.Model (State, Status(Pending, Loaded))
 import Types (ComponentEffects)
 import UI.Colors (warmGray)
 
 data Slot = ATFSlot
 derive instance eqATFSlot :: Eq Slot
 derive instance ordATFSlot :: Ord Slot
+
+data Query a
+  = GetSummary a
+  | HandleForm ATF.Message a
 
 screenStyle :: StyleM Unit
 screenStyle = do
@@ -62,17 +67,23 @@ roomTemplate state = layout
     Loaded ->
       case state.summary of
         Just summary ->
-          HH.div [ style screenStyle ]
-            [ HH.header [ style headerStyle ] [ HH.text "Matrix" ]
-            , HH.div [ style mainStyle ]
-              [ HH.p [ style userPaysStyle ]
-                [ HH.text $ summary.payUser.name <> " pays" ],
-                HH.p [ style relativePriceStyle ]
-                  [ HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less" ]
-              , HH.slot ATFSlot (ATF.addTransactionForm summary.payUser.id summary.users) unit (const Nothing)
-              , transactionsList summary.history
-            ]
-        ]
+          let
+            formProps =
+              { payUserId: summary.payUser.id
+              , users: summary.users
+              }
+          in
+            HH.div [ style screenStyle ]
+              [ HH.header [ style headerStyle ] [ HH.text "Matrix" ]
+              , HH.div [ style mainStyle ]
+                [ HH.p [ style userPaysStyle ]
+                  [ HH.text $ summary.payUser.name <> " pays" ],
+                  HH.p [ style relativePriceStyle ]
+                    [ HH.text $ summary.payUser.name <> " spent " <> (show summary.payDiff) <> " RUB less" ]
+                , HH.slot ATFSlot (ATF.addTransactionForm formProps) unit (HE.input HandleForm)
+                , transactionsList summary.history
+                ]
+              ]
 
         Nothing ->
           HH.div [ style errorStyle ] [ HH.text "Error..." ]

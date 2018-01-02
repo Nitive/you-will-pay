@@ -2,9 +2,6 @@ module Screens.Room.Model where
 
 import Data.Maybe (Maybe)
 
-data Query a
-  = GetSummary a
-
 type User =
   { name :: String
   , color :: String
