@@ -2,23 +2,20 @@
 
 module Main where
 
-import Api.AddTransaction
-import Api.RoomSummary
-import Control.Monad.IO.Class (liftIO)
-import Data.List (maximumBy, minimumBy)
+import Api.AddTransaction (addTransaction)
+import Api.RoomSummary (getRoomSummary)
 import Db.Connection
 import System.Environment (getEnv)
 import Text.Blaze.Html.Renderer.Text (renderHtml)
-import Text.Blaze.Html5 ((!))
-import View.Main
-import Web.Scotty (get, html, scotty)
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
+import View.Main (mainTemplate)
+import Web.Scotty (get, html, scotty, ScottyM)
 
+renderTemplate :: String -> ScottyM ()
 renderTemplate assetsPath =
   get "/" $
     html . renderHtml $ mainTemplate assetsPath
 
+main :: IO ()
 main = do
   conn <- connection
   assetsPath <- getEnv "ASSETS_PATH"
