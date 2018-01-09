@@ -9,7 +9,7 @@ import Data.List (maximumBy, minimumBy)
 import Db.Selectors
 import Db.Types as T
 import Web.Scotty (get, param, json, ScottyM)
-import Database.PostgreSQL.Simple (Connection)
+import Db.Connection (DbConnection, getConnection)
 
 getTransactionsAmount :: [Transaction] -> Int
 getTransactionsAmount transactions = sum $ map price transactions
@@ -35,9 +35,10 @@ getSummaryReport transactions users' =
     payDiff' = snd mostValuableUser - snd payUser
 
 
-getRoomSummary :: Connection -> ScottyM ()
-getRoomSummary conn =
+getRoomSummary :: DbConnection -> ScottyM ()
+getRoomSummary db =
   get "/api/room/:room/summary" $ do
+    conn <- liftIO $ getConnection db
     roomIdParam <- param "room"
     let roomId' = read roomIdParam :: Int
 
