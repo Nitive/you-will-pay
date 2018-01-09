@@ -1,8 +1,8 @@
 module Screens.Room.Template where
 
-import CSS (StyleM, backgroundColor, color, fontSize, fromInt, margin, marginBottom, marginTop, maxWidth, paddingLeft, paddingRight, paddingTop, px)
-import CSS.Common (auto)
-import CSS.TextAlign (textAlign, center)
+import CSS (StyleM, alignItems, backgroundColor, block, color, display, flex, fontSize, fromInt, height, justifyContent, letterSpacing, lineHeight, margin, marginBottom, marginTop, maxWidth, paddingLeft, paddingRight, paddingTop, px, vh)
+import CSS.Common (auto, center)
+import CSS.TextAlign as TA
 import Color.Scheme.HTML (red)
 import Components.AddTransactionForm as ATF
 import Components.Layout (layout)
@@ -10,10 +10,10 @@ import Components.TransactionsList (transactionsList)
 import Data.Maybe (Maybe(..))
 import Halogen as H
 import Halogen.HTML as HH
-import Halogen.HTML.Events as HE
 import Halogen.HTML.CSS (style)
+import Halogen.HTML.Events as HE
 import Prelude (class Eq, class Ord, Unit, discard, show, unit, ($), (<>))
-import Screens.Room.Model (State, Status(Pending, Loaded))
+import Screens.Room.Model (State, Status(..))
 import Types (ComponentEffects)
 import UI.Colors (warmGray)
 
@@ -47,19 +47,39 @@ userPaysStyle :: StyleM Unit
 userPaysStyle = do
   marginTop $ px 0.0
   marginBottom $ px 8.0
-  textAlign center
+  TA.textAlign TA.center
   fontSize $ px 24.0
 
 relativePriceStyle :: StyleM Unit
 relativePriceStyle = do
   marginBottom $ px 40.0
   color warmGray
-  textAlign center
+  TA.textAlign TA.center
   fontSize $ px 13.0
 
 errorStyle :: StyleM Unit
 errorStyle = do
   color red
+
+serverErrorContainer :: StyleM Unit
+serverErrorContainer = do
+  display flex
+  justifyContent center
+  alignItems center
+  height $ vh 100.0
+
+serverErrorH1 :: StyleM Unit
+serverErrorH1 = do
+  fontSize $ px 200.0
+  margin (px 0.0) (px 0.0) (px 0.0) (px 0.0)
+  lineHeight $ px 200.0
+
+serverErrorTrolling :: StyleM Unit
+serverErrorTrolling = do
+  fontSize $ px 24.0
+  letterSpacing $ px 1.6
+  display block
+  margin (px 10.0) (px 10.0) (px 10.0) (px 10.0)
 
 roomTemplate :: forall eff. State -> H.ParentHTML Query ATF.Query Slot (ComponentEffects eff)
 roomTemplate state = layout
@@ -90,3 +110,11 @@ roomTemplate state = layout
 
     Pending ->
       HH.text "Loading..."
+
+    Errored ->
+      HH.div [ style serverErrorContainer ]
+        [ HH.div_
+            [ HH.h1 [ style serverErrorH1 ] [ HH.text "502" ]
+            , HH.span [ style serverErrorTrolling ] [ HH.text "тебе должно быть стыдно" ]
+            ]
+        ]

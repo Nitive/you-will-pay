@@ -5,6 +5,7 @@ module Screens.Room
 
 import Api.GetSummary (GetSummaryResponse(..), getSummary)
 import Components.AddTransactionForm as ATF
+import Control.Monad.Error.Class (catchError)
 import Data.Array ((:))
 import Data.Foldable (find)
 import Data.Maybe (Maybe(..))
@@ -71,8 +72,10 @@ room =
   eval :: Query ~> H.ParentDSL State Query ATF.Query Slot Void (ComponentEffects eff)
   eval (GetSummary next) = do
     H.modify (_ { status = Pending })
-    res <- H.liftAff $ getSummary 1
-    H.modify (_ { status = Loaded, summary = responseToSummary res })
+    summary <- H.liftAff $ (responseToSummary <$> getSummary 1) `catchError` (const $ pure Nothing)
+    case summary of
+      Nothing -> H.modify (_ { status = Errored, summary = Nothing })
+      summary' -> H.modify (_ { status = Loaded, summary = summary' })
     pure next
 
   eval (HandleForm (ATF.AddTransaction transaction) next) = do

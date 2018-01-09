@@ -21,7 +21,7 @@ type Summary =
   , history :: Array Transaction
   }
 
-data Status = Pending | Loaded
+data Status = Pending | Loaded | Errored
 
 type State =
   { status :: Status
