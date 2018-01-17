@@ -23,7 +23,7 @@ RUN npx pulp build --skip-entry-point
 # compile my own purescript code
 RUN mkdir -p /opt/public/assets
 COPY /frontend/src/ /opt/ywp_frontend/src/
-RUN npx pulp browserify --to /opt/public/assets/app.js
+RUN npx pulp browserify --optimise --to /opt/public/assets/app.js
 RUN gzip --best --keep /opt/public/assets/app.js
 
 # copy resources
