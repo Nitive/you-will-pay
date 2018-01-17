@@ -21,7 +21,7 @@ COPY . /opt/ywp_frontend
 
 RUN mkdir -p /opt/public/assets
 RUN pulp browserify --optimise > /opt/public/assets/app.js
-RUN gzip --best --keep /opt/public/assets/app.js
+RUN gzip --best -c /opt/public/assets/app.js > /opt/public/assets/app.js
 COPY resources /opt/public/assets/
 
 WORKDIR /opt/public
