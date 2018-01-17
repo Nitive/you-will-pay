@@ -19,4 +19,4 @@ dependencies:
 executables:
   ywp:
     main: Main.hs
-    source-dirs: src/Server
+    source-dirs: src

@@ -1,13 +1,14 @@
-# purescript
-/bower_components/
+# root
 /node_modules/
-/.pulp-cache/
-/output/
-/generated-docs/
-/.psc*
-/.purs*
-/.psa*
+/npm-debug.log
+
+# purescript
+/frontend/bower_components/
+/frontend/node_modules/
+/frontend/npm-debug.log
+/frontend/.pulp-cache/
+/frontend/output/
 
 # haskell
-/.stack-work/
-you-will-pay.cabal
+/server/.stack-work/
+/server/you-will-pay.cabal

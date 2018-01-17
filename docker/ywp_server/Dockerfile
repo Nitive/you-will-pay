@@ -2,13 +2,13 @@ FROM samdoshi/haskell-stack
 
 WORKDIR /opt/ywp_server
 
-COPY ./stack.yaml /opt/ywp_server/stack.yaml
+COPY /server/stack.yaml /opt/ywp_server/stack.yaml
 RUN stack setup
 
-COPY ./package.yaml /opt/ywp_server/package.yaml
+COPY /server/package.yaml /opt/ywp_server/package.yaml
 RUN stack build --only-dependencies
 
-COPY ./src/Server /opt/ywp_server/src/Server/
+COPY /server/src/ /opt/ywp_server/src/
 RUN stack build
 
 CMD ["stack","exec","ywp"]
