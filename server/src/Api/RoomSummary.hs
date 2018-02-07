@@ -23,7 +23,7 @@ getSummaryReport transactions users' =
     { payUserId = payUserId'
     , payDiff = payDiff'
     , users = users'
-    , history = take 10 transactions
+    , history = take 50 transactions
     }
   where
     transactionsAmounts = map (getTransactionsAmount . getUserTransactions transactions) users'
